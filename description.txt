@@ -1,0 +1,7 @@
+This bot will help you to lock and unlock files and other stuff that only one person should handle at one time.
+
+Basically a locked file is locked to you. You edit it and all others wait until you are finished.
+
+This bot can only help you to organize your group! It doesn't really lock your files!
+
+Created by @EdJoPaTo

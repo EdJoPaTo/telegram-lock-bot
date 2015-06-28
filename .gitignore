@@ -1,0 +1,13 @@
+/*
+
+# GIT Stuff
+!.gitignore
+!*.md
+
+# Python Stuff
+!*.py
+
+# Telegram Bot Stuff
+!*.txt
+token.txt
+!*.png
