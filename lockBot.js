@@ -21,28 +21,59 @@ var initLockFile = (chat) => {
   return fileContent;
 };
 
+var lock = (chat, user, date, value) => {
+  var lockFile = initLockFile(chat);
+
+  if (lockFile.locks[value]) {
+    bot.sendMessage(chat.id, value + " is already locked by " + lockFile.locks[value].user.first_name);
+  } else {
+    lockFile.locks[value] = { user: user, date: date };
+    saveLockFile(chat, lockFile);
+    bot.sendMessage(chat.id, value + " is now locked by " + user.first_name);
+  }
+};
+
+var unlock = (chat, user, value, force) => {
+  var lockFile = initLockFile(chat);
+  var lockEntry = lockFile.locks[value];
+
+  if (!lockEntry) {
+    bot.sendMessage(chat.id, value + " is not locked?");
+  } else if (lockEntry.user.id != user.id && !force) {
+    bot.sendMessage(chat.id, "You did not locked that. If you really have to unlock " + value + " from " + lockEntry.user.first_name + " use `/forceunlock " + value + "`.")
+  } else {
+    delete lockFile.locks[value];
+    saveLockFile(chat, lockFile);
+    bot.sendMessage(chat.id, value + " is now unlocked.");
+  }
+}
+
+var force_reply = { reply_markup: JSON.stringify({force_reply: true}) };
+
+var sendWithReply = function(targetid, sendMessage, callback) {
+  bot.sendMessage(targetid, sendMessage, force_reply)
+  .then(function (sended) {
+    bot.onReplyToMessage(sended.chat.id, sended.message_id, callback);
+  });
+}
+
 // Setup polling way
 var bot = new TelegramBot(token, {polling: true});
 
-// Matches /echo [whatever]
-bot.onText(/\/echo (.+)/i, function (msg, match) {
-  var fromId = msg.from.id;
-  var resp = match[1];
-  bot.sendMessage(fromId, resp);
+bot.onText(/\/start/i, function (msg, match) {
+  var fromId = msg.chat.id;
+  bot.sendMessage(fromId, "Hi there!");
 });
 
-bot.onText(/\/lock (.+)/i, (msg, match) => {
-  var lockFile = initLockFile(msg.chat);
-  var fromId = msg.from.id;
-  var value = match[1];
-
-  if (lockFile.locks[value]) {
-    bot.sendMessage(msg.chat.id, value + " is already locked by " + lockFile.locks[value].user.first_name);
+bot.onText(/\/lock(?: (.+))?/i, (msg, match) => {
+  if (match[1]) {
+    lock(msg.chat, msg.from, msg.date, match[1]);
   } else {
-    lockFile.locks[value] = { user: msg.from, date: msg.date };
-    saveLockFile(msg.chat, lockFile);
-    bot.sendMessage(msg.chat.id, value + " is now locked by " + msg.from.first_name);
+    sendWithReply(msg.chat.id, "what do you want to lock?", function (reply) {
+      lock(reply.chat, reply.from, reply.date, reply.text);
+    });
   }
+
 });
 
 bot.onText(/\/isLocked (.+)/i, (msg, match) => {
@@ -57,33 +88,23 @@ bot.onText(/\/isLocked (.+)/i, (msg, match) => {
   }
 });
 
-bot.onText(/\/unlock (.+)/i, (msg, match) => {
-  var lockFile = initLockFile(msg.chat);
-  var value = match[1];
-  var lockEntry = lockFile.locks[value];
-
-  if (!lockEntry) {
-    bot.sendMessage(msg.chat.id, value + " is not locked?");
-  } else if (lockEntry.user.id != msg.from.id) {
-    bot.sendMessage(msg.chat.id, "You did not locked that. If you really have to unlock " + value + " from " + lockEntry.user.first_name + " use `/forceunlock " + value + "`.")
+bot.onText(/\/unlock(?: (.+))?/i, (msg, match) => {
+  if (match[1]) {
+    unlock(msg.chat, msg.from, match[1]);
   } else {
-    delete lockFile.locks[value];
-    saveLockFile(msg.chat, lockFile);
-    bot.sendMessage(msg.chat.id, value + " is now unlocked.");
+    sendWithReply(msg.chat.id, "what do you want to unlock?", function (reply) {
+      unlock(reply.chat, reply.from, reply.text);
+    });
   }
 });
 
-bot.onText(/\/forceunlock (.+)/i, (msg, match) => {
-  var lockFile = initLockFile(msg.chat);
-  var value = match[1];
-  var lockEntry = lockFile.locks[value];
-
-  if (!lockEntry) {
-    bot.sendMessage(msg.chat.id, value + " is not locked?");
+bot.onText(/\/forceunlock(?: (.+))/i, (msg, match) => {
+  if (match[1]) {
+    unlock(msg.chat, msg.from, match[1], true);
   } else {
-    delete lockFile.locks[value];
-    saveLockFile(msg.chat, lockFile);
-    bot.sendMessage(msg.chat.id, value + " is now unlocked.");
+    sendWithReply(msg.chat.id, "what do you want to unlock?", function (reply) {
+      unlock(reply.chat, reply.from, reply.text, true);
+    });
   }
 });
 
