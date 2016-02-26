@@ -1,49 +1,34 @@
-const fs = require('fs');
+var ChatConfigHandler = require('./ChatConfigHandler.js');
 var TelegramBot = require('node-telegram-bot-api');
+
+var lockConfigHandler = new ChatConfigHandler('locks', { locks: {}});
 
 var token = fs.readFileSync("token.txt", "utf8").trim();
 console.log(token);
 
-try { fs.mkdirSync('locks', '0755'); } catch (e) { }
-
-var saveLockFile = (chat, lockFile) => {
-  fs.writeFileSync('locks/' + chat.id + '.json', JSON.stringify(lockFile), 'utf8');
-};
-
-var initLockFile = (chat) => {
-  try {
-    var fileContentString = fs.readFileSync('locks/' + chat.id + '.json', 'utf8')
-    var fileContent = JSON.parse(fileContentString);
-  } catch (e) {
-    var fileContent = { "chat": chat, locks: {} };
-    saveLockFile(chat, fileContent);
-  }
-  return fileContent;
-};
-
 var lock = (chat, user, date, value) => {
-  var lockFile = initLockFile(chat);
+  var config = lockConfigHandler.loadConfig(chat);
 
-  if (lockFile.locks[value]) {
-    bot.sendMessage(chat.id, value + " is already locked by " + lockFile.locks[value].user.first_name);
+  if (config.locks[value]) {
+    bot.sendMessage(chat.id, value + " is already locked by " + config.locks[value].user.first_name);
   } else {
-    lockFile.locks[value] = { user: user, date: date };
-    saveLockFile(chat, lockFile);
+    config.locks[value] = { user: user, date: date };
+    lockConfigHandler.saveConfig(chat, config);
     bot.sendMessage(chat.id, value + " is now locked by " + user.first_name);
   }
 };
 
 var unlock = (chat, user, value, force) => {
-  var lockFile = initLockFile(chat);
-  var lockEntry = lockFile.locks[value];
+  var config = lockConfigHandler.loadConfig(chat);
+  var lockEntry = config.locks[value];
 
   if (!lockEntry) {
     bot.sendMessage(chat.id, value + " is not locked?");
   } else if (lockEntry.user.id != user.id && !force) {
     bot.sendMessage(chat.id, "You did not locked that. If you really have to unlock " + value + " from " + lockEntry.user.first_name + " use `/forceunlock " + value + "`.")
   } else {
-    delete lockFile.locks[value];
-    saveLockFile(chat, lockFile);
+    delete config.locks[value];
+    lockConfigHandler.saveConfig(chat, config);
     bot.sendMessage(chat.id, value + " is now unlocked.");
   }
 }
@@ -73,13 +58,11 @@ bot.onText(/\/lock(?: (.+))?/i, (msg, match) => {
       lock(reply.chat, reply.from, reply.date, reply.text);
     });
   }
-
 });
 
 bot.onText(/\/isLocked (.+)/i, (msg, match) => {
-  var lockFile = initLockFile(msg.chat);
   var value = match[1];
-  var lockEntry = lockFile.locks[value];
+  var lockEntry = lockConfigHandler.loadConfig(msg.chat).locks[value];
 
   if (!lockEntry) {
     bot.sendMessage(msg.chat.id, value + " is currently not locked.");
@@ -109,15 +92,15 @@ bot.onText(/\/forceunlock(?: (.+))/i, (msg, match) => {
 });
 
 bot.onText(/\/listlock/i, (msg, match) => {
-  var lockFile = initLockFile(msg.chat);
-  var lockedKeys = Object.keys(lockFile.locks);
+  var locks = lockConfigHandler.loadConfig(msg.chat).locks;
+  var lockedKeys = Object.keys(locks);
 
   if (lockedKeys.length == 0) {
     bot.sendMessage(msg.chat.id, "Nothing locked.");
     return;
   }
 
-  var lockedStrings = lockedKeys.map(v => v + " by " + lockFile.locks[v].user.first_name);
+  var lockedStrings = lockedKeys.map(v => v + " by " + locks[v].user.first_name);
   var message = "Currently locked:\n";
   message += lockedStrings.join('\n');
 
