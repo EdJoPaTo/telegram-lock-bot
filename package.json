@@ -1,0 +1,12 @@
+{
+  "author": {
+    "email": "edjopato@gmail.com",
+    "name": "Edgar To"
+  },
+  "main": "index.js",
+  "name": "telegram-lock-bot",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.20.1"
+  },
+  "version": "1.0.0"
+}
