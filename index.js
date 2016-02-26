@@ -82,7 +82,7 @@ bot.onText(/\/unlock(?: (.+))?/i, (msg, match) => {
   }
 });
 
-bot.onText(/\/forceunlock(?: (.+))/i, (msg, match) => {
+bot.onText(/\/forceunlock(?: (.+))?/i, (msg, match) => {
   if (match[1]) {
     unlock(msg.chat, msg.from, match[1], true);
   } else {
