@@ -1,12 +1,17 @@
 {
+  "name": "telegramLockBot",
+  "version": "1.0.0",
   "author": {
     "email": "edjopato@gmail.com",
     "name": "Edgar To"
   },
   "main": "index.js",
-  "name": "telegram-lock-bot",
   "dependencies": {
-    "node-telegram-bot-api": "^0.20.1"
+    "telegramBotBotHandler": "https://github.com/EdJoPaTo/telegramBotBotHandler/tarball/master",
+    "telegramBotChatConfigHandler": "https://github.com/EdJoPaTo/telegramBotChatConfigHandler/tarball/master"
   },
-  "version": "1.0.0"
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/EdJoPaTo/telegramLockBot.git"
+  }
 }
