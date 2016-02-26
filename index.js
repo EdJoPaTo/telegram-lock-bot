@@ -47,7 +47,8 @@ var bot = new TelegramBot(token, {polling: true});
 
 bot.onText(/\/start/i, function (msg, match) {
   var fromId = msg.chat.id;
-  bot.sendMessage(fromId, "Hi there!");
+  var name = msg.chat.title ? msg.chat.title : msg.chat.first_name;
+  bot.sendMessage(fromId, "Hi " + name + "!");
 });
 
 bot.onText(/\/lock(?: (.+))?/i, (msg, match) => {
