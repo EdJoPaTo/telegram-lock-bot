@@ -9,7 +9,11 @@ function cancelOption (msg) {
   bot.sendText(msg.chat, "😔");
 }
 
-bot.setMainMenu(function(chat) {
+bot.setMainMenuText(function (chat) {
+  return "What do you want to do?";
+});
+
+bot.setMainMenuOptions(function (chat) {
   var locks = lockConfigHandler.loadConfig(chat).locks
   var lockedKeys = Object.keys(locks);
 
@@ -21,10 +25,30 @@ bot.setMainMenu(function(chat) {
       options.forceunlock = forceUnlockOption;
     options.listlock = listlockOption;
   }
-  options[cancelString] = cancelOption;
+  if (chat.id < 0)
+    options[cancelString] = cancelOption;
 
-  bot.sendText(chat, "What do you want to do?", options);
+  return options;
 });
+
+bot.onCommand("start", false, function (msg) { bot.sendMainMenu(msg.chat); })
+bot.onCommand("menu", false, function (msg) { bot.sendMainMenu(msg.chat); })
+bot.onCommand("lock", false, lockOption);
+bot.onCommand("unlock", false, unlockOption);
+bot.onCommand("forceunlock", false, forceUnlockOption);
+bot.onCommand("listlocks", false, listlockOption);
+
+bot.onCommand("lock", true, function (msg, match) {
+  lock(msg.chat, msg.from, msg.date, match[1]);
+});
+
+bot.onCommand("unlock", true, function (msg, match) {
+  unlock(msg.chat, msg.from, match[1], false);
+})
+
+bot.onCommand("forceunlock", true, function (msg, match) {
+  unlock(msg.chat, msg.from, match[1], true);
+})
 
 function lockOption (msg) {
   bot.sendText(msg.chat, "What do you want to lock?", function(msg) {
@@ -68,6 +92,11 @@ function forceUnlockOption (msg) {
 function listlockOption (msg) {
   var locks = lockConfigHandler.loadConfig(msg.chat).locks;
   var lockedKeys = Object.keys(locks);
+
+  if (lockedKeys.length == 0) {
+    bot.sendText(msg.chat, "Nothing locked.");
+    return;
+  }
 
   var lockedStrings = lockedKeys.map(v => v + " by " + locks[v].user.first_name);
   var message = "Currently locked:\n";
