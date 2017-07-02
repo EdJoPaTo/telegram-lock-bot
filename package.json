@@ -1,17 +1,24 @@
 {
   "name": "telegramLockBot",
-  "version": "1.0.0",
-  "author": {
-    "email": "edjopato@gmail.com",
-    "name": "Edgar To"
-  },
+  "description": "Simple Telegram Bot to test the bot api",
+  "version": "1.0.1",
   "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EdJoPaTo/telegramLockBot.git"
+  },
+  "author": "edjopato@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EdJoPaTo/telegramLockBot/issues"
+  },
+  "homepage": "https://github.com/EdJoPaTo/telegramLockBot#readme",
   "dependencies": {
     "telegrambotbothandler": "^2.2.1",
     "telegrambotchatconfighandler": "^1.1.1"
-  },
-    "repository": {
-    "type": "git",
-    "url": "https://github.com/EdJoPaTo/telegramLockBot.git"
   }
 }
