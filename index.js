@@ -1,5 +1,5 @@
-var ChatConfigHandler = require('telegramBotChatConfigHandler');
-var BotHandler = require('telegramBotBotHandler');
+var ChatConfigHandler = require('telegrambotchatconfighandler');
+var BotHandler = require('telegrambotbothandler');
 
 var lockConfigHandler = new ChatConfigHandler('locks', { locks: {}});
 var bot = new BotHandler("token.txt");

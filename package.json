@@ -7,8 +7,8 @@
   },
   "main": "index.js",
   "dependencies": {
-    "telegramBotBotHandler": "https://github.com/EdJoPaTo/telegramBotBotHandler/tarball/master",
-    "telegramBotChatConfigHandler": "https://github.com/EdJoPaTo/telegramBotChatConfigHandler/tarball/master"
+    "telegrambotbothandler": "^2.2.1",
+    "telegrambotchatconfighandler": "^1.1.1"
   },
     "repository": {
     "type": "git",
