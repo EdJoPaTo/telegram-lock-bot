@@ -1,12 +1,12 @@
-var ChatConfigHandler = require('telegrambotchatconfighandler');
-var BotHandler = require('telegrambotbothandler');
+const ChatConfigHandler = require('telegrambotchatconfighandler');
+const BotHandler = require('telegrambotbothandler');
 
-var lockConfigHandler = new ChatConfigHandler('locks', {
+const lockConfigHandler = new ChatConfigHandler('locks', {
   locks: {}
 });
-var bot = new BotHandler("token.txt");
+const bot = new BotHandler("token.txt");
 
-var cancelString = "⛔️ cancel ⛔️";
+const cancelString = "⛔️ cancel ⛔️";
 
 function cancelOption(msg) {
   bot.sendText(msg.chat, "😔");
@@ -17,10 +17,10 @@ bot.setMainMenuText(function(chat) {
 });
 
 bot.setMainMenuOptions(function(chat) {
-  var locks = lockConfigHandler.loadConfig(chat).locks;
-  var lockedKeys = Object.keys(locks);
+  const locks = lockConfigHandler.loadConfig(chat).locks;
+  const lockedKeys = Object.keys(locks);
 
-  var options = {};
+  const options = {};
   options.lock = lockOption;
   if (lockedKeys.length > 0) {
     options.unlock = unlockOption;
@@ -64,15 +64,15 @@ function lockOption(msg) {
 }
 
 function unlockOption(msg) {
-  var locks = lockConfigHandler.loadConfig(msg.chat).locks;
-  var lockedKeys = Object.keys(locks);
-  var myLockedKeys = [];
-  for (var i = 0; i < lockedKeys.length; i++) {
+  const locks = lockConfigHandler.loadConfig(msg.chat).locks;
+  const lockedKeys = Object.keys(locks);
+  const myLockedKeys = [];
+  for (let i = 0; i < lockedKeys.length; i++) {
     if (locks[lockedKeys[i]].user.id == msg.from.id)
       myLockedKeys.push(lockedKeys[i]);
   }
 
-  var keyboard = bot.arrayToKeyboard(myLockedKeys, 3);
+  const keyboard = bot.arrayToKeyboard(myLockedKeys, 3);
   keyboard.push([cancelString]);
   bot.sendText(msg.chat, "What do you want to unlock?", function(msg) {
     if (msg.text == cancelString) {
@@ -84,8 +84,8 @@ function unlockOption(msg) {
 }
 
 function forceUnlockOption(msg) {
-  var lockedKeys = Object.keys(lockConfigHandler.loadConfig(msg.chat).locks);
-  var keyboard = bot.arrayToKeyboard(lockedKeys, 3);
+  const lockedKeys = Object.keys(lockConfigHandler.loadConfig(msg.chat).locks);
+  const keyboard = bot.arrayToKeyboard(lockedKeys, 3);
   keyboard.push([cancelString]);
   bot.sendText(msg.chat, "What do you want to unlock?", function(msg) {
     if (msg.text == cancelString) {
@@ -97,23 +97,23 @@ function forceUnlockOption(msg) {
 }
 
 function listlockOption(msg) {
-  var locks = lockConfigHandler.loadConfig(msg.chat).locks;
-  var lockedKeys = Object.keys(locks);
+  const locks = lockConfigHandler.loadConfig(msg.chat).locks;
+  const lockedKeys = Object.keys(locks);
 
   if (lockedKeys.length == 0) {
     bot.sendText(msg.chat, "Nothing locked.");
     return;
   }
 
-  var lockedStrings = lockedKeys.map(v => v + " by " + locks[v].user.first_name);
-  var message = "Currently locked:\n";
+  const lockedStrings = lockedKeys.map(v => v + " by " + locks[v].user.first_name);
+  let message = "Currently locked:\n";
   message += lockedStrings.join('\n');
 
   bot.sendText(msg.chat, message);
 }
 
 function lock(chat, user, date, value) {
-  var config = lockConfigHandler.loadConfig(chat);
+  const config = lockConfigHandler.loadConfig(chat);
 
   if (value == cancelString || value.substr(0, '/') === '/') {
     bot.sendText(chat, value + " can not be locked. Never ever. Sorry 😱.");
@@ -130,8 +130,8 @@ function lock(chat, user, date, value) {
 }
 
 function unlock(chat, user, value, force) {
-  var config = lockConfigHandler.loadConfig(chat);
-  var lockEntry = config.locks[value];
+  const config = lockConfigHandler.loadConfig(chat);
+  const lockEntry = config.locks[value];
 
   if (!lockEntry) {
     bot.sendText(chat, value + " is not locked?");
