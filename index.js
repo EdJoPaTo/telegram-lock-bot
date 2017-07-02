@@ -14,7 +14,7 @@ bot.setMainMenuText(function (chat) {
 });
 
 bot.setMainMenuOptions(function (chat) {
-  var locks = lockConfigHandler.loadConfig(chat).locks
+  var locks = lockConfigHandler.loadConfig(chat).locks;
   var lockedKeys = Object.keys(locks);
 
   var options = {};
@@ -31,8 +31,8 @@ bot.setMainMenuOptions(function (chat) {
   return options;
 });
 
-bot.onCommand("start", false, function (msg) { bot.sendMainMenu(msg.chat); })
-bot.onCommand("menu", false, function (msg) { bot.sendMainMenu(msg.chat); })
+bot.onCommand("start", false, function (msg) { bot.sendMainMenu(msg.chat); });
+bot.onCommand("menu", false, function (msg) { bot.sendMainMenu(msg.chat); });
 bot.onCommand("lock", false, lockOption);
 bot.onCommand("unlock", false, unlockOption);
 bot.onCommand("forceunlock", false, forceUnlockOption);
@@ -44,20 +44,20 @@ bot.onCommand("lock", true, function (msg, match) {
 
 bot.onCommand("unlock", true, function (msg, match) {
   unlock(msg.chat, msg.from, match[1], false);
-})
+});
 
 bot.onCommand("forceunlock", true, function (msg, match) {
   unlock(msg.chat, msg.from, match[1], true);
-})
+});
 
 function lockOption (msg) {
   bot.sendText(msg.chat, "What do you want to lock?", function(msg) {
     lock(msg.chat, msg.from, msg.date, msg.text);
   });
-};
+}
 
 function unlockOption (msg) {
-  var locks = lockConfigHandler.loadConfig(msg.chat).locks
+  var locks = lockConfigHandler.loadConfig(msg.chat).locks;
   var lockedKeys = Object.keys(locks);
   var myLockedKeys = [];
   for (var i = 0; i < lockedKeys.length; i++) {
@@ -103,7 +103,7 @@ function listlockOption (msg) {
   message += lockedStrings.join('\n');
 
   bot.sendText(msg.chat, message);
-};
+}
 
 var lock = (chat, user, date, value) => {
   var config = lockConfigHandler.loadConfig(chat);
@@ -126,10 +126,10 @@ var unlock = (chat, user, value, force) => {
   if (!lockEntry) {
     bot.sendText(chat, value + " is not locked?");
   } else if (lockEntry.user.id != user.id && !force) {
-    bot.sendText(chat, "You did not locked that. If you really have to unlock " + value + " from " + lockEntry.user.first_name + " use `forceunlock`.")
+    bot.sendText(chat, "You did not locked that. If you really have to unlock " + value + " from " + lockEntry.user.first_name + " use `forceunlock`.");
   } else {
     delete config.locks[value];
     lockConfigHandler.saveConfig(chat, config);
     bot.sendText(chat, value + " is now unlocked.");
   }
-}
+};
