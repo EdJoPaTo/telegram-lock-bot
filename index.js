@@ -112,7 +112,7 @@ function listlockOption(msg) {
   bot.sendText(msg.chat, message);
 }
 
-var lock = (chat, user, date, value) => {
+function lock(chat, user, date, value) {
   var config = lockConfigHandler.loadConfig(chat);
 
   if (value == cancelString || value.substr(0, '/') === '/') {
@@ -127,9 +127,9 @@ var lock = (chat, user, date, value) => {
     lockConfigHandler.saveConfig(chat, config);
     bot.sendText(chat, value + " is now locked by " + user.first_name);
   }
-};
+}
 
-var unlock = (chat, user, value, force) => {
+function unlock(chat, user, value, force) {
   var config = lockConfigHandler.loadConfig(chat);
   var lockEntry = config.locks[value];
 
@@ -142,4 +142,4 @@ var unlock = (chat, user, value, force) => {
     lockConfigHandler.saveConfig(chat, config);
     bot.sendText(chat, value + " is now unlocked.");
   }
-};
+}
