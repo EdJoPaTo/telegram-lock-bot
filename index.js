@@ -4,7 +4,7 @@ const BotHandler = require('telegrambotbothandler');
 const lockConfigHandler = new ChatConfigHandler('locks', {
   locks: {}
 });
-const bot = new BotHandler("token.txt");
+const bot = new BotHandler(process.env.npm_package_config_tokenpath);
 
 const cancelString = "⛔️ cancel ⛔️";
 
