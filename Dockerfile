@@ -1,10 +1,10 @@
-FROM node:8-alpine
+FROM node:10-alpine
 WORKDIR /app
 VOLUME /app/locks
 
 ENV NODE_ENV=production
-ADD package.json /app
-RUN npm install
+ADD package.json package-lock.json ./
+RUN npm ci
 
-ADD . /app
+ADD . .
 CMD ["npm", "start"]
