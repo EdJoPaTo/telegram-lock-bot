@@ -1,3 +1,4 @@
+const {existsSync} = require('fs');
 const ChatConfigHandler = require('telegrambotchatconfighandler');
 const BotHandler = require('telegrambotbothandler');
 
