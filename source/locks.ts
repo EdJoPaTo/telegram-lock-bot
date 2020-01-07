@@ -72,3 +72,7 @@ export function list(chat: Chat): Record<string, Lock> {
 
 	return chatData.config.locks
 }
+
+export function remove(chat: Chat): void {
+	data.delete(chatKeyOfChat(chat))
+}
