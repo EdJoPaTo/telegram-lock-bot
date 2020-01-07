@@ -34,7 +34,7 @@ bot.command('lock', async ctx => {
 		return ctx.reply('Use /lock <something>', Extra.markup(Markup.removeKeyboard()))
 	}
 
-	const existingLock = locks.isLocked(ctx.chat!, lockName)
+	const existingLock = locks.isLocked(ctx.chat!.id, lockName)
 	if (existingLock) {
 		return ctx.replyWithHTML(
 			`${format.monospace(lockName)} is already locked by ${lockKeeperLink(existingLock)}`,
@@ -58,7 +58,7 @@ async function unlock(ctx: ContextMessageUpdate, force: boolean): Promise<unknow
 		return ctx.reply('Use /unlock <something>', Extra.markup(Markup.removeKeyboard()))
 	}
 
-	const existingLock = locks.isLocked(ctx.chat!, lockName)
+	const existingLock = locks.isLocked(ctx.chat!.id, lockName)
 	if (!existingLock) {
 		return ctx.replyWithHTML(
 			`${format.monospace(lockName)} is not locked`,
@@ -81,7 +81,7 @@ async function unlock(ctx: ContextMessageUpdate, force: boolean): Promise<unknow
 }
 
 bot.command(['list', 'listlocks'], async ctx => {
-	const list = locks.list(ctx.chat!)
+	const list = locks.list(ctx.chat!.id)
 	const keys = Object.keys(list)
 
 	if (keys.length === 0) {

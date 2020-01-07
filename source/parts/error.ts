@@ -13,7 +13,7 @@ bot.use(async (ctx, next) => {
 				console.log('leave weird chat', error.message, ctx.chat)
 
 				await ctx.leaveChat().catch(() => {})
-				locks.remove(ctx.chat!)
+				locks.remove(ctx.chat!.id)
 				return
 			}
 		}

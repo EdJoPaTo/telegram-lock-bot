@@ -19,12 +19,12 @@ export interface LockFile {
 
 const data = new KeyValueInMemoryFiles<LockFile>('locks')
 
-function chatKeyOfChat(chat: Chat): string {
-	return chat.id > 0 ? String(chat.id) : String(chat.id).replace('-', 'g')
+function chatKeyOfChat(chatId: number): string {
+	return chatId > 0 ? String(chatId) : String(chatId).replace('-', 'g')
 }
 
-export function isLocked(chat: Chat, lockName: string): Lock | undefined {
-	const chatData = data.get(chatKeyOfChat(chat))
+export function isLocked(chatId: number, lockName: string): Lock | undefined {
+	const chatData = data.get(chatKeyOfChat(chatId))
 	if (!chatData) {
 		return undefined
 	}
@@ -33,7 +33,7 @@ export function isLocked(chat: Chat, lockName: string): Lock | undefined {
 }
 
 export async function lock(chat: Chat, lockName: string, user: User, date: UnixTimestamp): Promise<Lock> {
-	const chatData = data.get(chatKeyOfChat(chat)) ?? {
+	const chatData = data.get(chatKeyOfChat(chat.id)) ?? {
 		chat,
 		config: {
 			locks: {}
@@ -48,12 +48,12 @@ export async function lock(chat: Chat, lockName: string, user: User, date: UnixT
 	chatData.chat = chat
 	chatData.config.locks[lockName] = lock
 
-	await data.set(chatKeyOfChat(chat), chatData)
+	await data.set(chatKeyOfChat(chat.id), chatData)
 	return lock
 }
 
 export async function unlock(chat: Chat, lockName: string): Promise<void> {
-	const chatData = data.get(chatKeyOfChat(chat))
+	const chatData = data.get(chatKeyOfChat(chat.id))
 	if (!chatData) {
 		return
 	}
@@ -61,11 +61,11 @@ export async function unlock(chat: Chat, lockName: string): Promise<void> {
 	chatData.chat = chat
 	delete chatData.config.locks[lockName]
 
-	await data.set(chatKeyOfChat(chat), chatData)
+	await data.set(chatKeyOfChat(chat.id), chatData)
 }
 
-export function list(chat: Chat): Record<string, Lock> {
-	const chatData = data.get(chatKeyOfChat(chat))
+export function list(chatId: number): Record<string, Lock> {
+	const chatData = data.get(chatKeyOfChat(chatId))
 	if (!chatData) {
 		return {}
 	}
@@ -73,6 +73,6 @@ export function list(chat: Chat): Record<string, Lock> {
 	return chatData.config.locks
 }
 
-export function remove(chat: Chat): void {
-	data.delete(chatKeyOfChat(chat))
+export function remove(chatId: number): void {
+	data.delete(chatKeyOfChat(chatId))
 }
