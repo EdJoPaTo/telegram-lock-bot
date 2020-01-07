@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/no-empty-function: warn */
+
 import {Composer} from 'telegraf'
 
 import * as locks from '../locks'
