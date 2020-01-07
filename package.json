@@ -1,24 +1,54 @@
 {
-  "name": "telegramLockBot",
-  "description": "Simple Telegram Bot to test the bot api",
-  "version": "1.0.1",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/EdJoPaTo/telegramLockBot.git"
-  },
-  "author": "edjopato@gmail.com",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/EdJoPaTo/telegramLockBot/issues"
-  },
-  "homepage": "https://github.com/EdJoPaTo/telegramLockBot#readme",
-  "dependencies": {
-    "telegrambotbothandler": "^2.2.1",
-    "telegrambotchatconfighandler": "^1.1.1"
-  }
+	"name": "telegram-lock-bot",
+	"description": "Telegram Bot to handle a soft 'lock' / 'mutex' on something",
+	"version": "1.0.1",
+	"private": true,
+	"license": "MIT",
+	"repository": "EdJoPaTo/telegramLockBot",
+	"author": {
+		"name": "EdJoPaTo",
+		"email": "edjopato@gmail.com",
+		"url": "https://edjopato.de"
+	},
+	"engines": {
+		"node": ">=12"
+	},
+	"scripts": {
+		"build": "del dist && tsc",
+		"prepack": "npm run build",
+		"start": "ts-node source/index.ts",
+		"test": "tsc && xo"
+	},
+	"dependencies": {
+		"@edjopato/datastore": "^0.2.1",
+		"json-stable-stringify": "^1.0.1",
+		"telegraf": "^3.35.0",
+		"telegram-format": "^1.2.0",
+		"telegram-typings": "^3.6.1"
+	},
+	"devDependencies": {
+		"@sindresorhus/tsconfig": "^0.7.0",
+		"@types/node": "^13.1.4",
+		"@typescript-eslint/eslint-plugin": "^2.15.0",
+		"@typescript-eslint/parser": "^2.15.0",
+		"del-cli": "^3.0.0",
+		"eslint-config-xo-typescript": "^0.24.1",
+		"ts-node": "^8.5.4",
+		"typescript": "^3.7.4",
+		"xo": "^0.25.3"
+	},
+	"xo": {
+		"semicolon": false,
+		"extends": "xo-typescript",
+		"extensions": [
+			"ts"
+		],
+		"rules": {
+			"ava/no-ignored-test-files": "off",
+			"@typescript-eslint/semi": [
+				"error",
+				"never"
+			]
+		}
+	}
 }
