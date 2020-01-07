@@ -76,3 +76,9 @@ export function list(chatId: number): Record<string, Lock> {
 export function remove(chatId: number): void {
 	data.delete(chatKeyOfChat(chatId))
 }
+
+export function allChats(): readonly Chat[] {
+	return Object.values(data.entries())
+		.filter(o => o)
+		.map(o => o!.chat)
+}

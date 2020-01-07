@@ -3,6 +3,7 @@ import {existsSync, readFileSync} from 'fs'
 import Telegraf from 'telegraf'
 
 import * as parts from './parts'
+import {startupPartOfGroupCheck} from './startup-part-of-group-check'
 
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
@@ -38,6 +39,7 @@ if (process.env.NODE_ENV !== 'production') {
 bot.use(parts.bot.middleware())
 
 async function startup(): Promise<void> {
+	await startupPartOfGroupCheck(bot.telegram)
 	await bot.launch()
 	console.log(new Date(), 'Bot started as', bot.options.username)
 }
