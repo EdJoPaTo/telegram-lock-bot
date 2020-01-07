@@ -1,7 +1,7 @@
 import {Composer, ContextMessageUpdate, Extra, Markup} from 'telegraf'
 import {html as format} from 'telegram-format'
 
-import * as locks from './locks'
+import * as locks from '../locks'
 
 export const bot = new Composer()
 
@@ -23,24 +23,6 @@ function getCommandParameter(ctx: ContextMessageUpdate): string | undefined {
 function lockKeeperLink(lock: locks.Lock): string {
 	return format.userMention(lock.user.first_name, lock.user.id)
 }
-
-bot.use(async (ctx, next) => {
-	try {
-		await next?.()
-	} catch (error) {
-		if (error instanceof Error) {
-			if (error.message.includes('have no rights to send a message')) {
-				console.log('leave weird chat', error.message, ctx.chat)
-
-				await ctx.leaveChat().catch(() => {})
-				locks.remove(ctx.chat!)
-				return
-			}
-		}
-
-		console.error('ERROR', ctx.update, error)
-	}
-})
 
 bot.command('start', async ctx => {
 	return ctx.reply('You can use /lock and /unlock to soft lock what you like')

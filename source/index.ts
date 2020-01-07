@@ -2,7 +2,7 @@ import {existsSync, readFileSync} from 'fs'
 
 import Telegraf from 'telegraf'
 
-import * as logic from './bot-logic'
+import * as parts from './parts'
 
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
@@ -35,7 +35,7 @@ if (process.env.NODE_ENV !== 'production') {
 	})
 }
 
-bot.use(logic.bot.middleware())
+bot.use(parts.bot.middleware())
 
 async function startup(): Promise<void> {
 	await bot.launch()
