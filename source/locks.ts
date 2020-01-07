@@ -19,8 +19,12 @@ export interface LockFile {
 
 const data = new KeyValueInMemoryFiles<LockFile>('locks')
 
+function chatKeyOfChat(chat: Chat): string {
+	return chat.id > 0 ? String(chat.id) : String(chat.id).replace('-', 'g')
+}
+
 export function isLocked(chat: Chat, lockName: string): Lock | undefined {
-	const chatData = data.get(String(chat.id))
+	const chatData = data.get(chatKeyOfChat(chat))
 	if (!chatData) {
 		return undefined
 	}
@@ -29,8 +33,7 @@ export function isLocked(chat: Chat, lockName: string): Lock | undefined {
 }
 
 export async function lock(chat: Chat, lockName: string, user: User, date: UnixTimestamp): Promise<Lock> {
-	const chatKey = String(chat.id)
-	const chatData = data.get(chatKey) ?? {
+	const chatData = data.get(chatKeyOfChat(chat)) ?? {
 		chat,
 		config: {
 			locks: {}
@@ -45,13 +48,12 @@ export async function lock(chat: Chat, lockName: string, user: User, date: UnixT
 	chatData.chat = chat
 	chatData.config.locks[lockName] = lock
 
-	await data.set(chatKey, chatData)
+	await data.set(chatKeyOfChat(chat), chatData)
 	return lock
 }
 
 export async function unlock(chat: Chat, lockName: string): Promise<void> {
-	const chatKey = String(chat.id)
-	const chatData = data.get(chatKey)
+	const chatData = data.get(chatKeyOfChat(chat))
 	if (!chatData) {
 		return
 	}
@@ -59,12 +61,11 @@ export async function unlock(chat: Chat, lockName: string): Promise<void> {
 	chatData.chat = chat
 	delete chatData.config.locks[lockName]
 
-	await data.set(chatKey, chatData)
+	await data.set(chatKeyOfChat(chat), chatData)
 }
 
 export function list(chat: Chat): Record<string, Lock> {
-	const chatKey = String(chat.id)
-	const chatData = data.get(chatKey)
+	const chatData = data.get(chatKeyOfChat(chat))
 	if (!chatData) {
 		return {}
 	}
