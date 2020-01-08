@@ -18,6 +18,15 @@ bot.use(async (ctx, next) => {
 				locks.remove(ctx.chat!.id)
 				return
 			}
+
+			if (error.message.includes('bot was blocked by the user') ||
+				error.message.includes('bot is not a member of') ||
+				error.message.includes('bot was kicked from')
+			) {
+				console.log('delete locks as not part of chat', error.message, ctx.chat)
+				locks.remove(ctx.chat!.id)
+				return
+			}
 		}
 
 		console.error('ERROR', ctx.update, error)
