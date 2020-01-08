@@ -23,7 +23,7 @@
 		"@edjopato/datastore": "^0.2.1",
 		"json-stable-stringify": "^1.0.1",
 		"telegraf": "^3.35.0",
-		"telegram-format": "^1.2.0",
+		"telegram-format": "^1.2.1",
 		"telegram-typings": "^3.6.1"
 	},
 	"devDependencies": {
