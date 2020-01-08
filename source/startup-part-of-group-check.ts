@@ -39,6 +39,7 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 		if (info.type !== 'private') {
 			const meInfo = await tg.getChatMember(chatId, me)
 			if (meInfo.status === 'administrator') {
+				console.log('hint chat of having admin access to chat', chatId, info, meInfo)
 				await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
 			}
 		}
