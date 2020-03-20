@@ -23,7 +23,7 @@ function getCommandParameter(ctx: ContextMessageUpdate): string | undefined {
 }
 
 function lockKeeperLink(lock: locks.Lock): string {
-	return format.userMention(lock.user.first_name, lock.user.id)
+	return format.userMention(format.escape(lock.user.first_name), lock.user.id)
 }
 
 bot.command('start', async ctx => {
