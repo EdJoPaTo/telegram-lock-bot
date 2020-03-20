@@ -3,6 +3,8 @@ import {html as format} from 'telegram-format'
 
 import * as locks from '../locks'
 
+const MAX_LOCK_LENGTH = 100
+
 export const bot = new Composer()
 
 function getCommandParameter(ctx: ContextMessageUpdate): string | undefined {
@@ -32,6 +34,10 @@ bot.command('lock', async ctx => {
 	const lockName = getCommandParameter(ctx)
 	if (!lockName) {
 		return ctx.reply('Use /lock <something>', Extra.markup(Markup.removeKeyboard()))
+	}
+
+	if (lockName.length > MAX_LOCK_LENGTH) {
+		return ctx.reply(`Use /lock <something shorter than ${MAX_LOCK_LENGTH} characters>`, Extra.markup(Markup.removeKeyboard()))
 	}
 
 	const existingLock = locks.isLocked(ctx.chat!.id, lockName)
@@ -81,8 +87,18 @@ async function unlock(ctx: ContextMessageUpdate, force: boolean): Promise<unknow
 }
 
 bot.command(['list', 'listlocks'], async ctx => {
-	const list = locks.list(ctx.chat!.id)
-	const keys = Object.keys(list)
+	let list = locks.list(ctx.chat!.id)
+	let keys = Object.keys(list)
+
+	// Migration: remove too long lock names
+	await Promise.all(
+		keys
+			.filter(o => o.length > MAX_LOCK_LENGTH)
+			.map(async o => locks.unlock(ctx.chat!, o))
+	)
+
+	list = locks.list(ctx.chat!.id)
+	keys = Object.keys(list)
 
 	if (keys.length === 0) {
 		return ctx.reply('Nothing locked.', Extra.markup(Markup.removeKeyboard()))
