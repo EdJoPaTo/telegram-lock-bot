@@ -1,4 +1,5 @@
 /* eslint no-await-in-loop: off */
+/* eslint unicorn/string-content: off */
 
 import {Telegram} from 'telegraf'
 
