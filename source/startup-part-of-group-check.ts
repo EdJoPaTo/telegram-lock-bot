@@ -37,7 +37,10 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 			return
 		}
 
-		if (info.type !== 'private') {
+		// Groups can have 'all admins' which would also be the bot.
+		// Users cant really change something about that so dont annoy them any more with that.
+		// Also they dont know that they might need to upgrade their group to a supergroup and so on…
+		if (info.type === 'supergroup') {
 			const meInfo = await tg.getChatMember(chatId, me)
 			if (meInfo.status === 'administrator') {
 				console.log('hint chat of having admin access to chat', chatId, info, meInfo)
