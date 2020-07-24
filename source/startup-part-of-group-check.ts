@@ -16,6 +16,7 @@ export async function startupPartOfGroupCheck(tg: Telegram): Promise<void> {
 	const me = await tg.getMe()
 
 	for (const chat of allChats) {
+		await sleep(5) // Check up to 200 chats per second
 		await checkChat(tg, me.id, chat.id)
 	}
 }
@@ -61,4 +62,8 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 
 		console.log('checkChat error', chatId, error)
 	}
+}
+
+async function sleep(ms: number): Promise<void> {
+	return new Promise(resolve => setTimeout(resolve, ms))
 }
