@@ -39,9 +39,16 @@ if (process.env.NODE_ENV !== 'production') {
 bot.use(parts.bot.middleware())
 
 async function startup(): Promise<void> {
+	await bot.telegram.setMyCommands([
+		{command: 'lock', description: 'lock something'},
+		{command: 'unlock', description: 'unlock something you locked'},
+		{command: 'forceunlock', description: 'force to unlock something that someone else locked'},
+		{command: 'listlocks', description: 'list all current locks'}
+	])
+
 	await startupPartOfGroupCheck(bot.telegram)
 	await bot.launch()
 	console.log(new Date(), 'Bot started as', bot.options.username)
 }
 
-startup()
+void startup()

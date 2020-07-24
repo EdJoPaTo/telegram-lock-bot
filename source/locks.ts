@@ -78,7 +78,8 @@ export function remove(chatId: number): void {
 }
 
 export function allChats(): readonly Chat[] {
-	return Object.values(data.entries())
-		.filter(o => o)
-		.map(o => o!.chat)
+	return data.keys()
+		.map(o => data.get(o))
+		.filter((o): o is LockFile => Boolean(o))
+		.map(o => o.chat)
 }

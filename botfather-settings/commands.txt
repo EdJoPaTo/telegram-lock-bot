@@ -1,4 +1,0 @@
-lock - lock something
-unlock - unlock something you locked
-forceunlock - force to unlock something that someone else locked
-listlocks - List all current locks

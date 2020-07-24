@@ -1,4 +1,4 @@
-import {Composer, ContextMessageUpdate, Extra, Markup} from 'telegraf'
+import {Composer, Context as TelegrafContext, Extra, Markup} from 'telegraf'
 import {html as format} from 'telegram-format'
 
 import * as locks from '../locks'
@@ -7,7 +7,7 @@ const MAX_LOCK_LENGTH = 100
 
 export const bot = new Composer()
 
-function getCommandParameter(ctx: ContextMessageUpdate): string | undefined {
+function getCommandParameter(ctx: TelegrafContext): string | undefined {
 	if (!ctx.message || !ctx.message.entities || !ctx.message.text) {
 		return undefined
 	}
@@ -58,7 +58,7 @@ bot.command('lock', async ctx => {
 bot.command('unlock', async ctx => unlock(ctx, false))
 bot.command('forceunlock', async ctx => unlock(ctx, true))
 
-async function unlock(ctx: ContextMessageUpdate, force: boolean): Promise<unknown> {
+async function unlock(ctx: TelegrafContext, force: boolean): Promise<unknown> {
 	const lockName = getCommandParameter(ctx)
 	if (!lockName) {
 		return ctx.reply('Use /unlock <something>', Extra.markup(Markup.removeKeyboard()))

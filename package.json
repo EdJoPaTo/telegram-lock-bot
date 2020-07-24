@@ -7,11 +7,11 @@
 	"repository": "EdJoPaTo/telegramLockBot",
 	"author": {
 		"name": "EdJoPaTo",
-		"email": "edjopato@gmail.com",
+		"email": "lock-telegram-bot@edjopato.de",
 		"url": "https://edjopato.de"
 	},
 	"engines": {
-		"node": ">=12"
+		"node": ">=14"
 	},
 	"scripts": {
 		"build": "del dist && tsc",
@@ -20,32 +20,24 @@
 		"test": "tsc && xo"
 	},
 	"dependencies": {
-		"@edjopato/datastore": "^0.2.1",
+		"@edjopato/datastore": "^0.3.2",
 		"json-stable-stringify": "^1.0.1",
-		"telegraf": "^3.35.0",
+		"telegraf": "^3.38.0",
 		"telegram-format": "^2.0.0",
 		"telegram-typings": "^3.6.1"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^0.7.0",
-		"@types/node": "^13.1.4",
+		"@types/node": "^14.0.25",
 		"del-cli": "^3.0.0",
 		"ts-node": "^8.5.4",
 		"typescript": "^3.7.4",
-		"xo": "^0.28.0"
+		"xo": "^0.32.1"
 	},
 	"xo": {
 		"semicolon": false,
-		"extends": "xo-typescript",
-		"extensions": [
-			"ts"
-		],
 		"rules": {
-			"ava/no-ignored-test-files": "off",
-			"@typescript-eslint/semi": [
-				"error",
-				"never"
-			]
+			"ava/no-ignored-test-files": "off"
 		}
 	}
 }
