@@ -1,6 +1,6 @@
 /* eslint @typescript-eslint/no-dynamic-delete: off */
 
-import {Chat, User} from 'telegram-typings'
+import {Chat, User} from 'typegram'
 import {KeyValueInMemoryFiles} from '@edjopato/datastore'
 
 type UnixTimestamp = number
