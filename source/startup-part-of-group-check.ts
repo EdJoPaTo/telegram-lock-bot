@@ -65,5 +65,7 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 }
 
 async function sleep(ms: number): Promise<void> {
-	return new Promise(resolve => setTimeout(resolve, ms))
+	return new Promise(resolve => {
+		setTimeout(resolve, ms)
+	})
 }
