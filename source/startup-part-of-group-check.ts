@@ -1,6 +1,7 @@
 /* eslint no-await-in-loop: off */
 /* eslint unicorn/string-content: off */
 
+import {ChatFromGetChat, ChatMember} from 'typegram'
 import {Telegram} from 'telegraf'
 
 import * as locks from './locks'
@@ -30,8 +31,8 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 			return
 		}
 
-		const info = await tg.getChat(chatId)
-		if ((info as any).permissions && !(info as any).permissions.can_send_messages) {
+		const info = await tg.getChat(chatId) as ChatFromGetChat
+		if ('permissions' in info && info.permissions && !info.permissions.can_send_messages) {
 			console.log('can not send messages in group -> leave', chatId, info)
 			locks.remove(chatId)
 			await tg.leaveChat(chatId)
@@ -42,7 +43,7 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 		// Users cant really change something about that so dont annoy them any more with that.
 		// Also they dont know that they might need to upgrade their group to a supergroup and so on…
 		if (info.type === 'supergroup') {
-			const meInfo = await tg.getChatMember(chatId, me)
+			const meInfo = await tg.getChatMember(chatId, me) as ChatMember
 			if (meInfo.status === 'administrator') {
 				console.log('hint chat of having admin access to chat', chatId, info, meInfo)
 				await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
