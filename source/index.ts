@@ -5,6 +5,8 @@ import Telegraf from 'telegraf'
 import * as parts from './parts'
 import {startupPartOfGroupCheck} from './startup-part-of-group-check'
 
+process.title = 'tg-lock-bot'
+
 const tokenFilePath = existsSync('/run/secrets') ? '/run/secrets/bot-token.txt' : 'bot-token.txt'
 const token = readFileSync(tokenFilePath, 'utf8').trim()
 const bot = new Telegraf(token)
