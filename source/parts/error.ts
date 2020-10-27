@@ -9,7 +9,7 @@ export const bot = new Composer()
 bot.use(async (ctx, next) => {
 	try {
 		await next?.()
-	} catch (error) {
+	} catch (error: unknown) {
 		if (error instanceof Error) {
 			if (error.message.includes('have no rights to send a message')) {
 				console.log('leave weird chat', error.message, ctx.chat)

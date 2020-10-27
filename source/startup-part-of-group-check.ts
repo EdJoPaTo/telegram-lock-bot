@@ -49,13 +49,14 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 				await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
 			}
 		}
-	} catch (error) {
-		if (error.message.includes('bot was kicked from') ||
+	} catch (error: unknown) {
+		if (error instanceof Error && (
+			error.message.includes('bot was kicked from') ||
 			error.message.includes('bot can\'t initiate conversation with a user') ||
 			error.message.includes('bot is not a member of') ||
 			error.message.includes('chat is deactivated') ||
 			error.message.includes('chat not found')
-		) {
+		)) {
 			console.log('not part of group anymore', chatId, error.message)
 			locks.remove(chatId)
 			return
