@@ -89,28 +89,26 @@ async function unlock(ctx: TelegrafContext, force: boolean): Promise<unknown> {
 
 bot.command(['list', 'listlocks'], async ctx => {
 	let list = locks.list(ctx.chat!.id)
-	let keys = Object.keys(list)
 
 	// Migration: remove too long lock names
 	await Promise.all(
-		keys
+		Object.keys(list)
 			.filter(o => o.length > MAX_LOCK_LENGTH)
 			.map(async o => locks.unlock(ctx.chat as Chat, o))
 	)
 
 	list = locks.list(ctx.chat!.id)
-	keys = Object.keys(list)
 
-	if (keys.length === 0) {
+	if (Object.keys(list).length === 0) {
 		return ctx.reply('Nothing locked.', {reply_markup: {remove_keyboard: true}})
 	}
 
 	let text = ''
 	text += 'Currently locked:\n'
 
-	text += keys
-		.sort((a, b) => a.localeCompare(b))
-		.map(o => `${format.monospace(o)} by ${lockKeeperLink(list[o])}`)
+	text += Object.entries(list)
+		.sort(([aname], [bname]) => aname.localeCompare(bname))
+		.map(([name, lock]) => `${format.monospace(name)} by ${lockKeeperLink(lock)}`)
 		.join('\n')
 
 	return ctx.replyWithHTML(text, {reply_markup: {remove_keyboard: true}})
