@@ -1,8 +1,7 @@
 /* eslint no-await-in-loop: off */
 /* eslint unicorn/string-content: off */
 
-import {ChatFromGetChat, ChatMember} from 'typegram'
-import {Telegram} from 'telegraf'
+import {Telegraf} from 'telegraf'
 
 import * as locks from './locks'
 
@@ -11,7 +10,7 @@ const removeMeFromBeingAdminMessageText = `Telegram bots which are administrator
 As admin bots see every message they require more resources to run which is a useless waste of energy.
 Please change me to be a normal user. 😘`
 
-export async function startupPartOfGroupCheck(tg: Telegram): Promise<void> {
+export async function startupPartOfGroupCheck(tg: Telegraf['telegram']): Promise<void> {
 	const allChats = locks.allChats()
 
 	const me = await tg.getMe()
@@ -22,7 +21,7 @@ export async function startupPartOfGroupCheck(tg: Telegram): Promise<void> {
 	}
 }
 
-async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void> {
+async function checkChat(tg: Telegraf['telegram'], me: number, chatId: number): Promise<void> {
 	try {
 		if (Object.keys(locks.list(chatId)).length === 0) {
 			console.log('chat without locks', chatId)
@@ -31,7 +30,7 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 			return
 		}
 
-		const info = await tg.getChat(chatId) as ChatFromGetChat
+		const info = await tg.getChat(chatId)!
 		if ('permissions' in info && info.permissions && !info.permissions.can_send_messages) {
 			console.log('can not send messages in group -> leave', chatId, info)
 			locks.remove(chatId)
@@ -43,7 +42,7 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 		// Users cant really change something about that so dont annoy them any more with that.
 		// Also they dont know that they might need to upgrade their group to a supergroup and so on…
 		if (info.type === 'supergroup') {
-			const meInfo = await tg.getChatMember(chatId, me) as ChatMember
+			const meInfo = await tg.getChatMember(chatId, me)!
 			if (meInfo.status === 'administrator') {
 				console.log('hint chat of having admin access to chat', chatId, info, meInfo)
 				await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)

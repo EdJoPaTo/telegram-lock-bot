@@ -1,4 +1,3 @@
-import {Chat} from 'typegram'
 import {Composer, Context as TelegrafContext} from 'telegraf'
 import {html as format} from 'telegram-format'
 
@@ -9,7 +8,7 @@ const MAX_LOCK_LENGTH = 100
 export const bot = new Composer()
 
 function getCommandParameter(ctx: TelegrafContext): string | undefined {
-	if (!ctx.message || !ctx.message.entities || !ctx.message.text) {
+	if (!ctx.message || !('text' in ctx.message) || !ctx.message.entities) {
 		return undefined
 	}
 
@@ -49,7 +48,7 @@ bot.command('lock', async ctx => {
 		)
 	}
 
-	const lock = await locks.lock(ctx.chat as Chat, lockName, ctx.from!, Date.now() / 1000)
+	const lock = await locks.lock(ctx.chat!, lockName, ctx.from!, Date.now() / 1000)
 	return ctx.replyWithHTML(
 		`${format.monospace(lockName)} is now locked by ${lockKeeperLink(lock)}`,
 		{reply_markup: {remove_keyboard: true}}
@@ -80,7 +79,7 @@ async function unlock(ctx: TelegrafContext, force: boolean): Promise<unknown> {
 		)
 	}
 
-	await locks.unlock(ctx.chat as Chat, lockName)
+	await locks.unlock(ctx.chat!, lockName)
 	return ctx.replyWithHTML(
 		`${format.monospace(lockName)} is now free`,
 		{reply_markup: {remove_keyboard: true}}
@@ -94,7 +93,7 @@ bot.command(['list', 'listlocks'], async ctx => {
 	await Promise.all(
 		Object.keys(list)
 			.filter(o => o.length > MAX_LOCK_LENGTH)
-			.map(async o => locks.unlock(ctx.chat as Chat, o))
+			.map(async o => locks.unlock(ctx.chat!, o))
 	)
 
 	list = locks.list(ctx.chat!.id)
