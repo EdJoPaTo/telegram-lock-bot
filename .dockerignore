@@ -1,12 +1,13 @@
 .*
 *.md
 **/*.test.*
+botfather-settings
+coverage
 dist
 Dockerfile
 node_modules
 test
 
 # botfiles
-botfather-settings
-locks
 bot-token.txt
+locks
