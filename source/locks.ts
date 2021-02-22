@@ -1,5 +1,3 @@
-/* eslint @typescript-eslint/no-dynamic-delete: off */
-
 import {Chat, User} from 'typegram'
 import {KeyValueInMemoryFiles} from '@edjopato/datastore'
 
@@ -59,6 +57,7 @@ export async function unlock(chat: Chat, lockName: string): Promise<void> {
 	}
 
 	chatData.chat = chat
+	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 	delete chatData.config.locks[lockName]
 
 	await data.set(chatKeyOfChat(chat.id), chatData)

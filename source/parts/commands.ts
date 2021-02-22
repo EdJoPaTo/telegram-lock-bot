@@ -40,7 +40,7 @@ bot.command('lock', async ctx => {
 		return ctx.reply(`Use /lock <something shorter than ${MAX_LOCK_LENGTH} characters>`, {reply_markup: {remove_keyboard: true}})
 	}
 
-	const existingLock = locks.isLocked(ctx.chat!.id, lockName)
+	const existingLock = locks.isLocked(ctx.chat.id, lockName)
 	if (existingLock) {
 		return ctx.replyWithHTML(
 			`${format.monospace(lockName)} is already locked by ${lockKeeperLink(existingLock)}`,
@@ -48,7 +48,7 @@ bot.command('lock', async ctx => {
 		)
 	}
 
-	const lock = await locks.lock(ctx.chat!, lockName, ctx.from!, Date.now() / 1000)
+	const lock = await locks.lock(ctx.chat, lockName, ctx.from, Date.now() / 1000)
 	return ctx.replyWithHTML(
 		`${format.monospace(lockName)} is now locked by ${lockKeeperLink(lock)}`,
 		{reply_markup: {remove_keyboard: true}}
@@ -87,16 +87,16 @@ async function unlock(ctx: TelegrafContext, force: boolean): Promise<unknown> {
 }
 
 bot.command(['list', 'listlocks'], async ctx => {
-	let list = locks.list(ctx.chat!.id)
+	let list = locks.list(ctx.chat.id)
 
 	// Migration: remove too long lock names
 	await Promise.all(
 		Object.keys(list)
 			.filter(o => o.length > MAX_LOCK_LENGTH)
-			.map(async o => locks.unlock(ctx.chat!, o))
+			.map(async o => locks.unlock(ctx.chat, o))
 	)
 
-	list = locks.list(ctx.chat!.id)
+	list = locks.list(ctx.chat.id)
 
 	if (Object.keys(list).length === 0) {
 		return ctx.reply('Nothing locked.', {reply_markup: {remove_keyboard: true}})

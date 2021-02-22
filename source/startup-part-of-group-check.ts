@@ -1,7 +1,4 @@
-/* eslint no-await-in-loop: off */
-/* eslint unicorn/string-content: off */
-
-import {Telegraf} from 'telegraf'
+import {Telegram} from 'telegraf'
 
 import * as locks from './locks'
 
@@ -10,18 +7,20 @@ const removeMeFromBeingAdminMessageText = `Telegram bots which are administrator
 As admin bots see every message they require more resources to run which is a useless waste of energy.
 Please change me to be a normal user. 😘`
 
-export async function startupPartOfGroupCheck(tg: Telegraf['telegram']): Promise<void> {
+export async function startupPartOfGroupCheck(tg: Telegram): Promise<void> {
 	const allChats = locks.allChats()
 
 	const me = await tg.getMe()
 
 	for (const chat of allChats) {
+		// eslint-disable-next-line no-await-in-loop
 		await sleep(5) // Check up to 200 chats per second
+		// eslint-disable-next-line no-await-in-loop
 		await checkChat(tg, me.id, chat.id)
 	}
 }
 
-async function checkChat(tg: Telegraf['telegram'], me: number, chatId: number): Promise<void> {
+async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void> {
 	try {
 		if (Object.keys(locks.list(chatId)).length === 0) {
 			console.log('chat without locks', chatId)

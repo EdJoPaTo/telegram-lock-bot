@@ -1,5 +1,3 @@
-/* eslint @typescript-eslint/no-empty-function: warn */
-
 import {Composer} from 'telegraf'
 
 import * as locks from '../locks'
@@ -14,6 +12,7 @@ bot.use(async (ctx, next) => {
 			if (error.message.includes('have no rights to send a message')) {
 				console.log('leave weird chat', error.message, ctx.chat)
 
+				// eslint-disable-next-line @typescript-eslint/no-empty-function
 				await ctx.leaveChat().catch(() => {})
 				locks.remove(ctx.chat!.id)
 				return
