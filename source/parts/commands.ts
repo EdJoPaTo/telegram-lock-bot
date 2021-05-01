@@ -1,7 +1,7 @@
 import {Composer, Context as TelegrafContext} from 'telegraf'
 import {html as format} from 'telegram-format'
 
-import * as locks from '../locks'
+import * as locks from '../locks.js'
 
 const MAX_LOCK_LENGTH = 100
 

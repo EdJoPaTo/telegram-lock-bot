@@ -1,7 +1,7 @@
 import {Composer} from 'telegraf'
 
-import * as commands from './commands'
-import * as error from './error'
+import * as commands from './commands.js'
+import * as error from './error.js'
 
 export const bot = new Composer()
 

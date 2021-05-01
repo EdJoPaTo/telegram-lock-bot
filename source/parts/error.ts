@@ -1,6 +1,6 @@
 import {Composer} from 'telegraf'
 
-import * as locks from '../locks'
+import * as locks from '../locks.js'
 
 export const bot = new Composer()
 
