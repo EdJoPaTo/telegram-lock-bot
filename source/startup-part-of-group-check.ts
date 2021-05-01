@@ -29,8 +29,8 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 			return
 		}
 
-		const info = await tg.getChat(chatId)!
-		if ('permissions' in info && info.permissions && !info.permissions.can_send_messages) {
+		const info = await tg.getChat(chatId)
+		if (info && 'permissions' in info && info.permissions && !info.permissions.can_send_messages) {
 			console.log('can not send messages in group -> leave', chatId, info)
 			locks.remove(chatId)
 			await tg.leaveChat(chatId)
@@ -41,8 +41,8 @@ async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void
 		// Users cant really change something about that so dont annoy them any more with that.
 		// Also they dont know that they might need to upgrade their group to a supergroup and so on…
 		if (info.type === 'supergroup') {
-			const meInfo = await tg.getChatMember(chatId, me)!
-			if (meInfo.status === 'administrator') {
+			const meInfo = await tg.getChatMember(chatId, me)
+			if (meInfo?.status === 'administrator') {
 				console.log('hint chat of having admin access to chat', chatId, info, meInfo)
 				await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
 			}
