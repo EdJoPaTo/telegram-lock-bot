@@ -1,8 +1,8 @@
 {
 	"name": "telegram-lock-bot",
 	"description": "Telegram Bot to handle a soft 'lock' / 'mutex' on something",
-	"version": "2.2.0",
 	"private": true,
+	"version": "2.2.0",
 	"license": "MIT",
 	"repository": "EdJoPaTo/telegramLockBot",
 	"author": {
@@ -12,7 +12,7 @@
 	},
 	"scripts": {
 		"build": "del-cli dist && tsc",
-		"start": "ts-node source/index.ts",
+		"start": "node --loader ts-node/esm source/index.ts",
 		"test": "tsc --sourceMap && xo"
 	},
 	"type": "module",
