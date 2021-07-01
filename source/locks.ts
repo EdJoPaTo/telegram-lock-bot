@@ -1,4 +1,4 @@
-import {Chat, User} from 'typegram'
+import {Chat, User} from 'grammy/out/platform'
 import {KeyValueInMemoryFiles} from '@edjopato/datastore'
 
 type UnixTimestamp = number

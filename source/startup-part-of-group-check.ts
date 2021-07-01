@@ -1,4 +1,4 @@
-import {Telegram} from 'telegraf'
+import {Api} from 'grammy'
 
 import * as locks from './locks.js'
 
@@ -7,7 +7,7 @@ const removeMeFromBeingAdminMessageText = `Telegram bots which are administrator
 As admin bots see every message they require more resources to run which is a useless waste of energy.
 Please change me to be a normal user. 😘`
 
-export async function startupPartOfGroupCheck(tg: Telegram): Promise<void> {
+export async function startupPartOfGroupCheck(tg: Api): Promise<void> {
 	const allChats = locks.allChats()
 
 	const me = await tg.getMe()
@@ -20,7 +20,7 @@ export async function startupPartOfGroupCheck(tg: Telegram): Promise<void> {
 	}
 }
 
-async function checkChat(tg: Telegram, me: number, chatId: number): Promise<void> {
+async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 	try {
 		if (Object.keys(locks.list(chatId)).length === 0) {
 			console.log('chat without locks', chatId)

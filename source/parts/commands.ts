@@ -1,4 +1,4 @@
-import {Composer, Context as TelegrafContext} from 'telegraf'
+import {Composer, Context} from 'grammy'
 import {html as format} from 'telegram-format'
 
 import * as locks from '../locks.js'
@@ -6,21 +6,6 @@ import * as locks from '../locks.js'
 const MAX_LOCK_LENGTH = 100
 
 export const bot = new Composer()
-
-function getCommandParameter(ctx: TelegrafContext): string | undefined {
-	if (!ctx.message || !('text' in ctx.message) || !ctx.message.entities) {
-		return undefined
-	}
-
-	const command = ctx.message.entities
-		.find(o => o.offset === 0 && o.type === 'bot_command')
-	if (!command) {
-		return undefined
-	}
-
-	const args = ctx.message.text.slice(command.length + 1, ctx.message.text.length)
-	return args
-}
 
 function lockKeeperLink(lock: locks.Lock): string {
 	return format.userMention(format.escape(lock.user.first_name), lock.user.id)
@@ -31,7 +16,7 @@ bot.command('start', async ctx => {
 })
 
 bot.command('lock', async ctx => {
-	const lockName = getCommandParameter(ctx)
+	const lockName = typeof ctx.match === 'string' && ctx.match.trim()
 	if (!lockName) {
 		return ctx.reply('Use /lock <something>', {reply_markup: {remove_keyboard: true}})
 	}
@@ -42,48 +27,57 @@ bot.command('lock', async ctx => {
 
 	const existingLock = locks.isLocked(ctx.chat.id, lockName)
 	if (existingLock) {
-		return ctx.replyWithHTML(
+		return ctx.reply(
 			`${format.monospace(lockName)} is already locked by ${lockKeeperLink(existingLock)}`,
-			{reply_markup: {remove_keyboard: true}}
+			{
+				parse_mode: format.parse_mode,
+				reply_markup: {remove_keyboard: true}
+			}
 		)
 	}
 
-	const lock = await locks.lock(ctx.chat, lockName, ctx.from, Date.now() / 1000)
-	return ctx.replyWithHTML(
+	const lock = await locks.lock(ctx.chat, lockName, ctx.from!, Date.now() / 1000)
+	return ctx.reply(
 		`${format.monospace(lockName)} is now locked by ${lockKeeperLink(lock)}`,
-		{reply_markup: {remove_keyboard: true}}
+		{
+			parse_mode: format.parse_mode,
+			reply_markup: {remove_keyboard: true}
+		}
 	)
 })
 
 bot.command('unlock', async ctx => unlock(ctx, false))
 bot.command('forceunlock', async ctx => unlock(ctx, true))
 
-async function unlock(ctx: TelegrafContext, force: boolean): Promise<unknown> {
-	const lockName = getCommandParameter(ctx)
+async function unlock(ctx: Context, force: boolean): Promise<unknown> {
+	const lockName = typeof ctx.match === 'string' && ctx.match.trim()
 	if (!lockName) {
 		return ctx.reply('Use /unlock <something>', {reply_markup: {remove_keyboard: true}})
 	}
 
 	const existingLock = locks.isLocked(ctx.chat!.id, lockName)
 	if (!existingLock) {
-		return ctx.replyWithHTML(
-			`${format.monospace(lockName)} is not locked`,
-			{reply_markup: {remove_keyboard: true}}
-		)
+		return ctx.reply(`${format.monospace(lockName)} is not locked`, {
+			parse_mode: format.parse_mode,
+			reply_markup: {remove_keyboard: true}
+		})
 	}
 
 	if (!force && ctx.from?.id !== existingLock.user.id) {
-		return ctx.replyWithHTML(
+		return ctx.reply(
 			`${format.monospace(lockName)} is locked by ${lockKeeperLink(existingLock)}. You can only unlock your own locks.\nAlternativly use /forceunlock`,
-			{reply_markup: {remove_keyboard: true}}
+			{
+				parse_mode: format.parse_mode,
+				reply_markup: {remove_keyboard: true}
+			}
 		)
 	}
 
 	await locks.unlock(ctx.chat!, lockName)
-	return ctx.replyWithHTML(
-		`${format.monospace(lockName)} is now free`,
-		{reply_markup: {remove_keyboard: true}}
-	)
+	return ctx.reply(`${format.monospace(lockName)} is now free`, {
+		parse_mode: format.parse_mode,
+		reply_markup: {remove_keyboard: true}
+	})
 }
 
 bot.command(['list', 'listlocks'], async ctx => {
@@ -110,5 +104,8 @@ bot.command(['list', 'listlocks'], async ctx => {
 		.map(([name, lock]) => `${format.monospace(name)} by ${lockKeeperLink(lock)}`)
 		.join('\n')
 
-	return ctx.replyWithHTML(text, {reply_markup: {remove_keyboard: true}})
+	return ctx.reply(text, {
+		parse_mode: format.parse_mode,
+		reply_markup: {remove_keyboard: true}
+	})
 })

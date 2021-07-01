@@ -1,4 +1,4 @@
-import {Composer} from 'telegraf'
+import {Composer} from 'grammy'
 
 import * as commands from './commands.js'
 import * as error from './error.js'
