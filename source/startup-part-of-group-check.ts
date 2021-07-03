@@ -14,7 +14,7 @@ export async function startupPartOfGroupCheck(tg: Api): Promise<void> {
 
 	for (const chat of allChats) {
 		// eslint-disable-next-line no-await-in-loop
-		await sleep(5) // Check up to 200 chats per second
+		await sleep(10) // Check up to 100 chats per second
 		// eslint-disable-next-line no-await-in-loop
 		await checkChat(tg, me.id, chat.id)
 	}
@@ -59,6 +59,11 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 			console.log('not part of group anymore', chatId, error.message)
 			locks.remove(chatId)
 			return
+		}
+
+		if (error instanceof Error && error.message.includes('Too Many Requests')) {
+			console.log('Too Many Requests  sleep now...', error.message)
+			await sleep(1000)
 		}
 
 		console.log('checkChat error', chatId, error)
