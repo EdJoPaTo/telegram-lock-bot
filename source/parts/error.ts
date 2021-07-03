@@ -9,7 +9,9 @@ bot.use(async (ctx, next) => {
 		await next?.()
 	} catch (error: unknown) {
 		if (error instanceof Error) {
-			if (error.message.includes('have no rights to send a message')) {
+			if (error.message.includes('have no rights to send a message') ||
+				error.message.includes('CHAT_WRITE_FORBIDDEN')
+			) {
 				console.log('leave weird chat', error.message, ctx.chat)
 
 				// eslint-disable-next-line @typescript-eslint/no-empty-function
