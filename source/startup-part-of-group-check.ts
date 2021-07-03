@@ -29,8 +29,9 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 			return
 		}
 
-		const info = await tg.getChat(chatId)
-		if (info && 'permissions' in info && info.permissions && !info.permissions.can_send_messages) {
+		const info = await getBasicChatInfo(tg, chatId)
+
+		if (info.permissions && !info.permissions.can_send_messages) {
 			console.log('can not send messages in group -> leave', chatId, info)
 			locks.remove(chatId)
 			await tg.leaveChat(chatId)
@@ -42,7 +43,7 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 		// Also they dont know that they might need to upgrade their group to a supergroup and so on…
 		if (info.type === 'supergroup') {
 			const meInfo = await tg.getChatMember(chatId, me)
-			if (meInfo?.status === 'administrator') {
+			if (meInfo.status === 'administrator') {
 				console.log('hint chat of having admin access to chat', chatId, info, meInfo)
 				await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
 			}
@@ -61,6 +62,17 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 		}
 
 		console.log('checkChat error', chatId, error)
+	}
+}
+
+async function getBasicChatInfo(tg: Api, chatId: number) {
+	const info = await tg.getChat(chatId)
+	return {
+		id: info.id,
+		type: info.type,
+		username: 'username' in info ? info.username : undefined,
+		title: 'title' in info ? info.title : undefined,
+		permissions: 'permissions' in info ? info.permissions : undefined
 	}
 }
 
