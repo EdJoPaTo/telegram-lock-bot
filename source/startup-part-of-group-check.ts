@@ -71,8 +71,11 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 		}
 
 		if (error instanceof Error && error.message.includes('Too Many Requests')) {
-			console.log('Too Many Requests  sleep now...', error.message)
-			await sleep(1000)
+			const match = /retry after (\d+)/.exec(error.message)?.[1]
+			const seconds = Number(match ?? 10) + 1
+
+			console.log('Too Many Requests  sleep now...', seconds, match, error.message)
+			await sleep(seconds * 1000)
 		}
 
 		console.log('checkChat error', chatId, error)
