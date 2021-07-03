@@ -4,8 +4,10 @@ import * as locks from './locks.js'
 
 const removeMeFromBeingAdminMessageText = `Telegram bots which are administrators are a privacy risk to your group as they see every message or might do things every other group admin could do.
 
-As admin bots see every message they require more resources to run which is a useless waste of energy.
-Please change me to be a normal user. 😘`
+This bot works without admin access. It only reacts to commands and does nothing else than sending messages in response.
+As admin bots see every message, not only commands, they require more resources to run which is a useless waste of energy.
+
+If you are still interested, invite me again as a normal non-admin user.`
 
 export async function startupPartOfGroupCheck(tg: Api): Promise<void> {
 	const allChats = locks.allChats()
@@ -44,8 +46,15 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 		if (info.type === 'supergroup') {
 			const meInfo = await tg.getChatMember(chatId, me)
 			if (meInfo.status === 'administrator') {
-				console.log('hint chat of having admin access to chat', chatId, info, meInfo)
-				await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
+				console.log('leave supergroup because of admin access', chatId, info, meInfo)
+				try {
+					await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
+				} catch (error: unknown) {
+					console.log('checkChat send admin access message ERROR', error instanceof Error ? error.message : error)
+				}
+
+				locks.remove(chatId)
+				await tg.leaveChat(chatId)
 			}
 		}
 	} catch (error: unknown) {
@@ -56,7 +65,7 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 			error.message.includes('chat is deactivated') ||
 			error.message.includes('chat not found')
 		)) {
-			console.log('not part of group anymore', chatId, error.message)
+			console.log('not part of chat anymore', chatId, error.message)
 			locks.remove(chatId)
 			return
 		}
