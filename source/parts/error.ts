@@ -10,6 +10,7 @@ bot.use(async (ctx, next) => {
 	} catch (error: unknown) {
 		if (error instanceof Error) {
 			if (error.message.includes('have no rights to send a message')
+				|| error.message.includes('not enough rights to send text messages to the chat')
 				|| error.message.includes('CHAT_WRITE_FORBIDDEN')
 			) {
 				console.log('leave weird chat', error.message, ctx.chat)
