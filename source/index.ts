@@ -24,7 +24,7 @@ async function startup(): Promise<void> {
 		{command: 'lock', description: 'lock something'},
 		{command: 'unlock', description: 'unlock something you locked'},
 		{command: 'forceunlock', description: 'force to unlock something that someone else locked'},
-		{command: 'listlocks', description: 'list all current locks'}
+		{command: 'listlocks', description: 'list all current locks'},
 	])
 
 	await startupPartOfGroupCheck(bot.api)

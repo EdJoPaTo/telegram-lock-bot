@@ -59,11 +59,11 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 		}
 	} catch (error: unknown) {
 		if (error instanceof Error && (
-			error.message.includes('bot was kicked from') ||
-			error.message.includes('bot can\'t initiate conversation with a user') ||
-			error.message.includes('bot is not a member of') ||
-			error.message.includes('chat is deactivated') ||
-			error.message.includes('chat not found')
+			error.message.includes('bot was kicked from')
+			|| error.message.includes('bot can\'t initiate conversation with a user')
+			|| error.message.includes('bot is not a member of')
+			|| error.message.includes('chat is deactivated')
+			|| error.message.includes('chat not found')
 		)) {
 			console.log('not part of chat anymore', chatId, error.message)
 			locks.remove(chatId)
@@ -89,7 +89,7 @@ async function getBasicChatInfo(tg: Api, chatId: number) {
 		type: info.type,
 		username: 'username' in info ? info.username : undefined,
 		title: 'title' in info ? info.title : undefined,
-		permissions: 'permissions' in info ? info.permissions : undefined
+		permissions: 'permissions' in info ? info.permissions : undefined,
 	}
 }
 

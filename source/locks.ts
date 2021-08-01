@@ -34,13 +34,13 @@ export async function lock(chat: Chat, lockName: string, user: User, date: UnixT
 	const chatData = data.get(chatKeyOfChat(chat.id)) ?? {
 		chat,
 		config: {
-			locks: {}
-		}
+			locks: {},
+		},
 	}
 
 	const lock: Lock = {
 		user,
-		date
+		date,
 	}
 
 	chatData.chat = chat

@@ -11,9 +11,7 @@ function lockKeeperLink(lock: locks.Lock): string {
 	return format.userMention(format.escape(lock.user.first_name), lock.user.id)
 }
 
-bot.command('start', async ctx => {
-	return ctx.reply('You can use /lock and /unlock to soft lock what you like')
-})
+bot.command('start', async ctx => ctx.reply('You can use /lock and /unlock to soft lock what you like'))
 
 bot.command('lock', async ctx => {
 	const lockName = typeof ctx.match === 'string' && ctx.match.trim()
@@ -31,8 +29,8 @@ bot.command('lock', async ctx => {
 			`${format.monospace(lockName)} is already locked by ${lockKeeperLink(existingLock)}`,
 			{
 				parse_mode: format.parse_mode,
-				reply_markup: {remove_keyboard: true}
-			}
+				reply_markup: {remove_keyboard: true},
+			},
 		)
 	}
 
@@ -41,8 +39,8 @@ bot.command('lock', async ctx => {
 		`${format.monospace(lockName)} is now locked by ${lockKeeperLink(lock)}`,
 		{
 			parse_mode: format.parse_mode,
-			reply_markup: {remove_keyboard: true}
-		}
+			reply_markup: {remove_keyboard: true},
+		},
 	)
 })
 
@@ -59,7 +57,7 @@ async function unlock(ctx: Context, force: boolean): Promise<unknown> {
 	if (!existingLock) {
 		return ctx.reply(`${format.monospace(lockName)} is not locked`, {
 			parse_mode: format.parse_mode,
-			reply_markup: {remove_keyboard: true}
+			reply_markup: {remove_keyboard: true},
 		})
 	}
 
@@ -68,15 +66,15 @@ async function unlock(ctx: Context, force: boolean): Promise<unknown> {
 			`${format.monospace(lockName)} is locked by ${lockKeeperLink(existingLock)}. You can only unlock your own locks.\nAlternativly use /forceunlock`,
 			{
 				parse_mode: format.parse_mode,
-				reply_markup: {remove_keyboard: true}
-			}
+				reply_markup: {remove_keyboard: true},
+			},
 		)
 	}
 
 	await locks.unlock(ctx.chat!, lockName)
 	return ctx.reply(`${format.monospace(lockName)} is now free`, {
 		parse_mode: format.parse_mode,
-		reply_markup: {remove_keyboard: true}
+		reply_markup: {remove_keyboard: true},
 	})
 }
 
@@ -87,7 +85,7 @@ bot.command(['list', 'listlocks'], async ctx => {
 	await Promise.all(
 		Object.keys(list)
 			.filter(o => o.length > MAX_LOCK_LENGTH)
-			.map(async o => locks.unlock(ctx.chat, o))
+			.map(async o => locks.unlock(ctx.chat, o)),
 	)
 
 	list = locks.list(ctx.chat.id)
@@ -106,6 +104,6 @@ bot.command(['list', 'listlocks'], async ctx => {
 
 	return ctx.reply(text, {
 		parse_mode: format.parse_mode,
-		reply_markup: {remove_keyboard: true}
+		reply_markup: {remove_keyboard: true},
 	})
 })
