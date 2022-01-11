@@ -2,7 +2,7 @@
 	"name": "telegram-lock-bot",
 	"description": "Telegram Bot to handle a soft 'lock' / 'mutex' on something",
 	"private": true,
-	"version": "3.1.2",
+	"version": "3.1.3",
 	"license": "MIT",
 	"repository": "EdJoPaTo/telegramLockBot",
 	"author": {
