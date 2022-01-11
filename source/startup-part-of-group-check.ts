@@ -20,6 +20,8 @@ export async function startupPartOfGroupCheck(tg: Api): Promise<void> {
 		// eslint-disable-next-line no-await-in-loop
 		await checkChat(tg, me.id, chat.id)
 	}
+
+	console.log('group check finished. Remaining:', locks.allChats().length, 'of initial', allChats.length)
 }
 
 async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
