@@ -39,12 +39,7 @@
 		"rules": {
 			"@typescript-eslint/naming-convention": "off",
 			"ava/no-ignored-test-files": "off",
-			"node/prefer-global/process": "off",
-			"unicorn/prefer-node-protocol": "off",
-			"import/extensions": [
-				"error",
-				"ignorePackages"
-			]
+			"node/prefer-global/process": "off"
 		}
 	}
 }
