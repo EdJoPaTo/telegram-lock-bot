@@ -1,4 +1,4 @@
-import {Chat, User} from '@grammyjs/types'
+import {Chat, User} from 'grammy/types'
 import {KeyValueInMemoryFiles} from '@edjopato/datastore'
 
 type UnixTimestamp = number
