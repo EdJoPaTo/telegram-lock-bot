@@ -11,7 +11,13 @@ function lockKeeperLink(lock: locks.Lock): string {
 	return format.userMention(format.escape(lock.user.first_name), lock.user.id)
 }
 
-bot.command('start', async ctx => ctx.reply('You can use /lock and /unlock to soft lock what you like'))
+bot.command(
+	'start',
+	async ctx =>
+		ctx.reply(
+			'You can use /lock and /unlock to coordinate with your group. It will not lock anything for real but its a neat tool to work together on things like files in shared folders.',
+		),
+)
 
 bot.command('lock', async ctx => {
 	const lockName = typeof ctx.match === 'string' && ctx.match.trim()
