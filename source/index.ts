@@ -8,7 +8,9 @@ process.title = 'tg-lock-bot'
 
 const token = process.env['BOT_TOKEN']
 if (!token) {
-	throw new Error('You have to provide the bot-token from @BotFather via environment variable (BOT_TOKEN)')
+	throw new Error(
+		'You have to provide the bot-token from @BotFather via environment variable (BOT_TOKEN)',
+	)
 }
 
 const bot = new Bot(token)
@@ -19,19 +21,20 @@ if (process.env['NODE_ENV'] !== 'production') {
 
 bot.use(parts.bot.middleware())
 
-async function startup(): Promise<void> {
-	await bot.api.setMyCommands([
-		{command: 'lock', description: 'lock something'},
-		{command: 'unlock', description: 'unlock something you locked'},
-		{command: 'forceunlock', description: 'force to unlock something that someone else locked'},
-		{command: 'listlocks', description: 'list all current locks'},
-	])
+await bot.api.setMyCommands([
+	{command: 'lock', description: 'lock something'},
+	{command: 'unlock', description: 'unlock something you locked'},
+	{
+		command: 'forceunlock',
+		description: 'force to unlock something that someone else locked',
+	},
+	{command: 'listlocks', description: 'list all current locks'},
+])
 
-	await startupPartOfGroupCheck(bot.api)
+await startupPartOfGroupCheck(bot.api)
 
-	const {username} = await bot.api.getMe()
-	console.log(new Date(), 'Bot starts as', username)
-	await bot.start()
-}
-
-void startup()
+await bot.start({
+	onStart(botInfo) {
+		console.log(new Date(), 'Bot starts as', botInfo.username)
+	},
+})

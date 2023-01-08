@@ -1,4 +1,4 @@
-import {Composer, Context} from 'grammy'
+import {Composer, type Context} from 'grammy'
 import {html as format} from 'telegram-format'
 
 import * as locks from '../locks.js'
@@ -16,11 +16,16 @@ bot.command('start', async ctx => ctx.reply('You can use /lock and /unlock to so
 bot.command('lock', async ctx => {
 	const lockName = typeof ctx.match === 'string' && ctx.match.trim()
 	if (!lockName) {
-		return ctx.reply('Use /lock <something>', {reply_markup: {remove_keyboard: true}})
+		return ctx.reply('Use /lock <something>', {
+			reply_markup: {remove_keyboard: true},
+		})
 	}
 
 	if (lockName.length > MAX_LOCK_LENGTH) {
-		return ctx.reply(`Use /lock <something shorter than ${MAX_LOCK_LENGTH} characters>`, {reply_markup: {remove_keyboard: true}})
+		return ctx.reply(
+			`Use /lock <something shorter than ${MAX_LOCK_LENGTH} characters>`,
+			{reply_markup: {remove_keyboard: true}},
+		)
 	}
 
 	const existingLock = locks.isLocked(ctx.chat.id, lockName)
@@ -34,7 +39,12 @@ bot.command('lock', async ctx => {
 		)
 	}
 
-	const lock = await locks.lock(ctx.chat, lockName, ctx.from!, Date.now() / 1000)
+	const lock = await locks.lock(
+		ctx.chat,
+		lockName,
+		ctx.from!,
+		Date.now() / 1000,
+	)
 	return ctx.reply(
 		`${format.monospace(lockName)} is now locked by ${lockKeeperLink(lock)}`,
 		{
@@ -50,7 +60,9 @@ bot.command('forceunlock', async ctx => unlock(ctx, true))
 async function unlock(ctx: Context, force: boolean): Promise<unknown> {
 	const lockName = typeof ctx.match === 'string' && ctx.match.trim()
 	if (!lockName) {
-		return ctx.reply('Use /unlock <something>', {reply_markup: {remove_keyboard: true}})
+		return ctx.reply('Use /unlock <something>', {
+			reply_markup: {remove_keyboard: true},
+		})
 	}
 
 	const existingLock = locks.isLocked(ctx.chat!.id, lockName)
@@ -91,7 +103,9 @@ bot.command(['list', 'listlocks'], async ctx => {
 	list = locks.list(ctx.chat.id)
 
 	if (Object.keys(list).length === 0) {
-		return ctx.reply('Nothing locked.', {reply_markup: {remove_keyboard: true}})
+		return ctx.reply('Nothing locked.', {
+			reply_markup: {remove_keyboard: true},
+		})
 	}
 
 	let text = ''

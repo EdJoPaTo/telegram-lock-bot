@@ -1,4 +1,4 @@
-import {Api} from 'grammy'
+import {type Api} from 'grammy'
 
 import * as locks from './locks.js'
 
@@ -21,7 +21,12 @@ export async function startupPartOfGroupCheck(tg: Api): Promise<void> {
 		await checkChat(tg, me.id, chat.id)
 	}
 
-	console.log('group check finished. Remaining:', locks.allChats().length, 'of initial', allChats.length)
+	console.log(
+		'group check finished. Remaining:',
+		locks.allChats().length,
+		'of initial',
+		allChats.length,
+	)
 }
 
 async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
@@ -48,11 +53,19 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 		if (info.type === 'supergroup') {
 			const meInfo = await tg.getChatMember(chatId, me)
 			if (meInfo.status === 'administrator') {
-				console.log('leave supergroup because of admin access', chatId, info, meInfo)
+				console.log(
+					'leave supergroup because of admin access',
+					chatId,
+					info,
+					meInfo,
+				)
 				try {
 					await tg.sendMessage(chatId, removeMeFromBeingAdminMessageText)
 				} catch (error: unknown) {
-					console.log('checkChat send admin access message ERROR', error instanceof Error ? error.message : error)
+					console.log(
+						'checkChat send admin access message ERROR',
+						error instanceof Error ? error.message : error,
+					)
 				}
 
 				locks.remove(chatId)
@@ -76,7 +89,12 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 			const match = /retry after (\d+)/.exec(error.message)?.[1]
 			const seconds = Number(match ?? 10) + 1
 
-			console.log('Too Many Requests  sleep now...', seconds, match, error.message)
+			console.log(
+				'Too Many Requests  sleep now...',
+				seconds,
+				match,
+				error.message,
+			)
 			await sleep(seconds * 1000)
 		}
 

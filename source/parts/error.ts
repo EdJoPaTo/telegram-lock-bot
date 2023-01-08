@@ -25,7 +25,11 @@ bot.use(async (ctx, next) => {
 				|| error.message.includes('bot is not a member of')
 				|| error.message.includes('bot was kicked from')
 			) {
-				console.log('delete locks as not part of chat', error.message, ctx.chat)
+				console.log(
+					'delete locks as not part of chat',
+					error.message,
+					ctx.chat,
+				)
 				locks.remove(ctx.chat!.id)
 				return
 			}

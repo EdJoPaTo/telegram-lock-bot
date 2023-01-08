@@ -1,14 +1,14 @@
-import {Chat, User} from 'grammy/types'
 import {KeyValueInMemoryFiles} from '@edjopato/datastore'
+import type {Chat, User} from 'grammy/types'
 
 type UnixTimestamp = number
 
-export interface Lock {
+export type Lock = {
 	user: User;
 	date: UnixTimestamp;
 }
 
-export interface LockFile {
+export type LockFile = {
 	chat: Chat;
 	config: {
 		locks: Record<string, Lock>;
@@ -30,7 +30,12 @@ export function isLocked(chatId: number, lockName: string): Lock | undefined {
 	return chatData.config.locks[lockName]
 }
 
-export async function lock(chat: Chat, lockName: string, user: User, date: UnixTimestamp): Promise<Lock> {
+export async function lock(
+	chat: Chat,
+	lockName: string,
+	user: User,
+	date: UnixTimestamp,
+): Promise<Lock> {
 	const chatData = data.get(chatKeyOfChat(chat.id)) ?? {
 		chat,
 		config: {
