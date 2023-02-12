@@ -1,4 +1,4 @@
-import {type Api} from 'grammy'
+import type {Api} from 'grammy'
 
 import * as locks from './locks.js'
 
