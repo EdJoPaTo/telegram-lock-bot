@@ -15,7 +15,7 @@ export type LockFile = {
 	};
 }
 
-const data = new KeyValueInMemoryFiles<LockFile>('locks')
+const data = new KeyValueInMemoryFiles<string, LockFile>('locks')
 
 function chatKeyOfChat(chatId: number): string {
 	return chatId > 0 ? String(chatId) : String(chatId).replace('-', 'g')
