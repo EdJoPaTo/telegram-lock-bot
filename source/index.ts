@@ -1,6 +1,5 @@
 import {Bot} from 'grammy'
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time'
-
 import * as parts from './parts/index.js'
 import {startupPartOfGroupCheck} from './startup-part-of-group-check.js'
 
