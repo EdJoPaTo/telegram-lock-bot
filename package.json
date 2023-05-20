@@ -32,7 +32,6 @@
 		"xo": "^0.54.1"
 	},
 	"xo": {
-		"semicolon": false,
 		"rules": {
 			"@typescript-eslint/naming-convention": "off",
 			"ava/no-ignored-test-files": "off",

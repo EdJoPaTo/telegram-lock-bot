@@ -1,33 +1,33 @@
-import {KeyValueInMemoryFiles} from '@edjopato/datastore'
-import type {Chat, User} from 'grammy/types'
+import {KeyValueInMemoryFiles} from '@edjopato/datastore';
+import type {Chat, User} from 'grammy/types';
 
-type UnixTimestamp = number
+type UnixTimestamp = number;
 
 export type Lock = {
 	user: User;
 	date: UnixTimestamp;
-}
+};
 
 export type LockFile = {
 	chat: Chat;
 	config: {
 		locks: Record<string, Lock>;
 	};
-}
+};
 
-const data = new KeyValueInMemoryFiles<string, LockFile>('locks')
+const data = new KeyValueInMemoryFiles<string, LockFile>('locks');
 
 function chatKeyOfChat(chatId: number): string {
-	return chatId > 0 ? String(chatId) : String(chatId).replace('-', 'g')
+	return chatId > 0 ? String(chatId) : String(chatId).replace('-', 'g');
 }
 
 export function isLocked(chatId: number, lockName: string): Lock | undefined {
-	const chatData = data.get(chatKeyOfChat(chatId))
+	const chatData = data.get(chatKeyOfChat(chatId));
 	if (!chatData) {
-		return undefined
+		return undefined;
 	}
 
-	return chatData.config.locks[lockName]
+	return chatData.config.locks[lockName];
 }
 
 export async function lock(
@@ -41,44 +41,44 @@ export async function lock(
 		config: {
 			locks: {},
 		},
-	}
+	};
 
 	const lock: Lock = {
 		user,
 		date,
-	}
+	};
 
-	chatData.chat = chat
-	chatData.config.locks[lockName] = lock
+	chatData.chat = chat;
+	chatData.config.locks[lockName] = lock;
 
-	await data.set(chatKeyOfChat(chat.id), chatData)
-	return lock
+	await data.set(chatKeyOfChat(chat.id), chatData);
+	return lock;
 }
 
 export async function unlock(chat: Chat, lockName: string): Promise<void> {
-	const chatData = data.get(chatKeyOfChat(chat.id))
+	const chatData = data.get(chatKeyOfChat(chat.id));
 	if (!chatData) {
-		return
+		return;
 	}
 
-	chatData.chat = chat
+	chatData.chat = chat;
 	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
-	delete chatData.config.locks[lockName]
+	delete chatData.config.locks[lockName];
 
-	await data.set(chatKeyOfChat(chat.id), chatData)
+	await data.set(chatKeyOfChat(chat.id), chatData);
 }
 
 export function list(chatId: number): Record<string, Lock> {
-	const chatData = data.get(chatKeyOfChat(chatId))
+	const chatData = data.get(chatKeyOfChat(chatId));
 	if (!chatData) {
-		return {}
+		return {};
 	}
 
-	return chatData.config.locks
+	return chatData.config.locks;
 }
 
 export function remove(chatId: number): void {
-	data.delete(chatKeyOfChat(chatId))
+	data.delete(chatKeyOfChat(chatId));
 }
 
 export function allChats(): readonly Chat[] {
@@ -86,5 +86,5 @@ export function allChats(): readonly Chat[] {
 		.map(o => data.get(o))
 		// eslint-disable-next-line unicorn/prefer-native-coercion-functions
 		.filter((o): o is LockFile => Boolean(o))
-		.map(o => o.chat)
+		.map(o => o.chat);
 }
