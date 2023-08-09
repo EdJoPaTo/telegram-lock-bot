@@ -26,10 +26,10 @@
 		"telegram-format": "^2.0.0"
 	},
 	"devDependencies": {
-		"@sindresorhus/tsconfig": "^3.0.1",
+		"@sindresorhus/tsconfig": "^4.0.0",
 		"@types/node": "^18.0.3",
 		"typescript": "^5.0.4",
-		"xo": "^0.54.1"
+		"xo": "^0.55.1"
 	},
 	"xo": {
 		"rules": {
