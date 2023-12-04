@@ -33,8 +33,7 @@
 	},
 	"xo": {
 		"rules": {
-			"@typescript-eslint/naming-convention": "off",
-			"ava/no-ignored-test-files": "off"
+			"@typescript-eslint/naming-convention": "off"
 		}
 	}
 }
