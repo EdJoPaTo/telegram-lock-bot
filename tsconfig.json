@@ -5,8 +5,8 @@
 	],
 	"compilerOptions": {
 		"declaration": false,
+		"removeComments": true,
 		"sourceMap": true,
-		"target": "ES2022", // Node.js 18
 		"outDir": "dist"
 	}
 }
