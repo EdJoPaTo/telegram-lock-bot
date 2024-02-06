@@ -8,7 +8,7 @@ export type Lock = {
 	date: UnixTimestamp;
 };
 
-export type LockFile = {
+type LockFile = {
 	chat: Chat;
 	config: {
 		locks: Record<string, Lock>;
