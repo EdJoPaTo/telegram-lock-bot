@@ -25,9 +25,9 @@
 		"telegram-format": "^3.0.0"
 	},
 	"devDependencies": {
-		"@sindresorhus/tsconfig": "^5.0.0",
+		"@sindresorhus/tsconfig": "^6.0.0",
 		"@types/node": "^18.0.3",
-		"typescript": "^5.0.4",
+		"typescript": "^5.5.2",
 		"xo": "^0.58.0"
 	},
 	"xo": {
