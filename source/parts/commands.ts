@@ -10,13 +10,21 @@ function lockKeeperLink(lock: locks.Lock): string {
 	return format.userMention(format.escape(lock.user.first_name), lock.user.id);
 }
 
-bot.command(
-	'start',
-	async ctx =>
-		ctx.reply(
-			'You can use /lock and /unlock to coordinate with your group. It will not lock anything for real but its a neat tool to work together on things like files in shared folders.',
-		),
-);
+bot.command('start', async ctx =>
+	ctx.reply(
+		'You can use /lock and /unlock to coordinate with your group. It will not lock anything for real but its a neat tool to work together on things like files in shared folders.',
+		{
+			reply_markup: {remove_keyboard: true},
+		},
+	));
+
+bot.command('privacy', async ctx =>
+	ctx.reply(
+		'You can see the data stored for this chat with /listlocks. See source code at https://github.com/EdJoPaTo/telegram-lock-bot',
+		{
+			reply_markup: {remove_keyboard: true},
+		},
+	));
 
 bot.command('lock', async ctx => {
 	const lockName = typeof ctx.match === 'string' && ctx.match.trim();
