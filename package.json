@@ -20,15 +20,15 @@
 	},
 	"dependencies": {
 		"@edjopato/datastore": "^0.7.0",
-		"grammy": "^1.10.1",
+		"grammy": "^1.28.0",
 		"telegraf-middleware-console-time": "^2.1.0",
 		"telegram-format": "^3.0.0"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^6.0.0",
-		"@types/node": "^18.0.3",
-		"typescript": "^5.5.2",
-		"xo": "^0.58.0"
+		"@types/node": "^18.19.42",
+		"typescript": "^5.5.4",
+		"xo": "^0.59.3"
 	},
 	"xo": {
 		"rules": {
