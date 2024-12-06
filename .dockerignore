@@ -1,12 +1,13 @@
 .*
 *.md
 **/*.test.*
-botfather-settings
-coverage
+**/test.*
 dist
 Dockerfile
 node_modules
 test
+
+botfather-settings
 
 # botfiles
 locks

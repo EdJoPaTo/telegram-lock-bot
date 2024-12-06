@@ -16,7 +16,7 @@
 	},
 	"type": "module",
 	"engines": {
-		"node": ">=18"
+		"node": ">=22"
 	},
 	"dependencies": {
 		"@edjopato/datastore": "^0.7.1",
@@ -26,7 +26,7 @@
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^7.0.0",
-		"@types/node": "^18.19.67",
+		"@types/node": "^22.10.1",
 		"typescript": "^5.7.2",
 		"xo": "^0.60.0"
 	},
