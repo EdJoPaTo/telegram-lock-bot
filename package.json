@@ -19,14 +19,14 @@
 		"node": ">=22"
 	},
 	"dependencies": {
-		"@edjopato/datastore": "^0.7.1",
+		"@edjopato/datastore": "^0.7.2",
 		"grammy": "^1.32.0",
 		"telegraf-middleware-console-time": "^2.1.0",
 		"telegram-format": "^3.0.0"
 	},
 	"devDependencies": {
 		"@sindresorhus/tsconfig": "^7.0.0",
-		"@types/node": "^22.10.1",
+		"@types/node": "^22.10.3",
 		"typescript": "^5.7.2",
 		"xo": "^0.60.0"
 	},
