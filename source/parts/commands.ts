@@ -1,6 +1,6 @@
 import {Composer, type Context} from 'grammy';
 import {html as format} from 'telegram-format';
-import * as locks from '../locks.js';
+import * as locks from '../locks.ts';
 
 const MAX_LOCK_LENGTH = 100;
 

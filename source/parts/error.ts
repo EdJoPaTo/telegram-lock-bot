@@ -1,5 +1,5 @@
 import {Composer} from 'grammy';
-import * as locks from '../locks.js';
+import * as locks from '../locks.ts';
 
 export const bot = new Composer();
 

@@ -1,7 +1,7 @@
 import {Composer} from 'grammy';
-import * as commands from './commands.js';
-import * as error from './error.js';
-import * as leaveChannel from './leave-channel.js';
+import * as commands from './commands.ts';
+import * as error from './error.ts';
+import * as leaveChannel from './leave-channel.ts';
 
 export const bot = new Composer();
 

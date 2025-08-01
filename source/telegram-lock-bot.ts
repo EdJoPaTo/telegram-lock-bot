@@ -1,8 +1,8 @@
 import {env} from 'node:process';
 import {Bot} from 'grammy';
 import {generateUpdateMiddleware} from 'telegraf-middleware-console-time';
-import * as parts from './parts/index.js';
-import {startupPartOfGroupCheck} from './startup-part-of-group-check.js';
+import * as parts from './parts/index.ts';
+import {startupPartOfGroupCheck} from './startup-part-of-group-check.ts';
 
 const token = env['BOT_TOKEN'];
 if (!token) {
