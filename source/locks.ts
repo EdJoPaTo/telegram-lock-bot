@@ -82,9 +82,12 @@ export function remove(chatId: number): void {
 }
 
 export function allChats(): readonly Chat[] {
-	return data.keys()
-		.map(o => data.get(o))
-		// eslint-disable-next-line unicorn/prefer-native-coercion-functions
-		.filter((o): o is LockFile => Boolean(o))
-		.map(o => o.chat);
+	return (
+		data
+			.keys()
+			.map(o => data.get(o))
+			// eslint-disable-next-line unicorn/prefer-native-coercion-functions
+			.filter((o): o is LockFile => Boolean(o))
+			.map(o => o.chat)
+	);
 }

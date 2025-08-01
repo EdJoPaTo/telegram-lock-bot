@@ -44,7 +44,9 @@ bot.command('lock', async ctx => {
 	const existingLock = locks.isLocked(ctx.chat.id, lockName);
 	if (existingLock) {
 		return ctx.reply(
-			`${format.monospace(lockName)} is already locked by ${lockKeeperLink(existingLock)}`,
+			`${format.monospace(lockName)} is already locked by ${
+				lockKeeperLink(existingLock)
+			}`,
 			{
 				parse_mode: format.parse_mode,
 				reply_markup: {remove_keyboard: true},
@@ -88,7 +90,9 @@ async function unlock(ctx: Context, force: boolean): Promise<unknown> {
 
 	if (!force && ctx.from?.id !== existingLock.user.id) {
 		return ctx.reply(
-			`${format.monospace(lockName)} is locked by ${lockKeeperLink(existingLock)}. You can only unlock your own locks.\nAlternativly use /forceunlock`,
+			`${format.monospace(lockName)} is locked by ${
+				lockKeeperLink(existingLock)
+			}. You can only unlock your own locks.\nAlternativly use /forceunlock`,
 			{
 				parse_mode: format.parse_mode,
 				reply_markup: {remove_keyboard: true},
@@ -107,11 +111,9 @@ bot.command(['list', 'listlocks'], async ctx => {
 	let list = locks.list(ctx.chat.id);
 
 	// Migration: remove too long lock names
-	await Promise.all(
-		Object.keys(list)
-			.filter(o => o.length > MAX_LOCK_LENGTH)
-			.map(async o => locks.unlock(ctx.chat, o)),
-	);
+	await Promise.all(Object.keys(list)
+		.filter(o => o.length > MAX_LOCK_LENGTH)
+		.map(async o => locks.unlock(ctx.chat, o)));
 
 	list = locks.list(ctx.chat.id);
 
@@ -126,7 +128,8 @@ bot.command(['list', 'listlocks'], async ctx => {
 
 	text += Object.entries(list)
 		.sort(([aname], [bname]) => aname.localeCompare(bname))
-		.map(([name, lock]) => `${format.monospace(name)} by ${lockKeeperLink(lock)}`)
+		.map(([name, lock]) =>
+			`${format.monospace(name)} by ${lockKeeperLink(lock)}`)
 		.join('\n');
 
 	return ctx.reply(text, {

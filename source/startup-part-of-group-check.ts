@@ -1,7 +1,8 @@
 import type {Api} from 'grammy';
 import * as locks from './locks.js';
 
-const removeMeFromBeingAdminMessageText = `Telegram bots which are administrators are a privacy risk to your group as they see every message or might do things every other group admin could do.
+const removeMeFromBeingAdminMessageText
+	= `Telegram bots which are administrators are a privacy risk to your group as they see every message or might do things every other group admin could do.
 
 This bot works without admin access. It only reacts to commands and does nothing else than sending messages in response.
 As admin bots see every message, not only commands, they require more resources to run which is a useless waste of energy.
@@ -72,13 +73,14 @@ async function checkChat(tg: Api, me: number, chatId: number): Promise<void> {
 			}
 		}
 	} catch (error: unknown) {
-		if (error instanceof Error && (
-			error.message.includes('bot was kicked from')
-			|| error.message.includes('bot can\'t initiate conversation with a user')
-			|| error.message.includes('bot is not a member of')
-			|| error.message.includes('chat is deactivated')
-			|| error.message.includes('chat not found')
-		)) {
+		if (
+			error instanceof Error
+			&& (error.message.includes('bot was kicked from')
+				|| error.message.includes('bot can\'t initiate conversation with a user')
+				|| error.message.includes('bot is not a member of')
+				|| error.message.includes('chat is deactivated')
+				|| error.message.includes('chat not found'))
+		) {
 			console.log('not part of chat anymore', chatId, error.message);
 			locks.remove(chatId);
 			return;
