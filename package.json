@@ -11,12 +11,17 @@
 		"url": "https://edjopato.de"
 	},
 	"scripts": {
-		"start": "tsc && node --enable-source-maps dist/telegram-lock-bot.js",
+		"start": "node --enable-source-maps source/telegram-lock-bot.ts",
 		"test": "tsc && xo"
 	},
 	"type": "module",
 	"engines": {
-		"node": ">=22"
+		"node": ">=24"
+	},
+	"devEngines": {
+		"packageManager": {
+			"name": "npm"
+		}
 	},
 	"dependencies": {
 		"@edjopato/datastore": "^0.7.2",
@@ -25,7 +30,7 @@
 		"telegram-format": "^3.0.0"
 	},
 	"devDependencies": {
-		"@types/node": "^22.15.34",
+		"@types/node": "^24.10.1",
 		"typescript": "^5.9.2",
 		"xo": "^1.2.1"
 	},
