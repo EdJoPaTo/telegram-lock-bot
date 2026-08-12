@@ -13,11 +13,16 @@ bot.use(async (ctx, next) => {
 				|| error.message.includes('not enough rights to send text messages to the chat')
 				|| error.message.includes('CHAT_WRITE_FORBIDDEN')
 			) {
-				console.log('leave weird chat', error.message, ctx.chat);
+				console.log(
+					'leave weird chat',
+					error.message,
+					ctx.chatId,
+					ctx.chat,
+				);
 				try {
 					await ctx.leaveChat();
 				} finally {
-					locks.remove(ctx.chat!.id);
+					locks.remove(ctx.chatId!);
 				}
 
 				return;
@@ -31,9 +36,10 @@ bot.use(async (ctx, next) => {
 				console.log(
 					'delete locks as not part of chat',
 					error.message,
+					ctx.chatId,
 					ctx.chat,
 				);
-				locks.remove(ctx.chat!.id);
+				locks.remove(ctx.chatId!);
 				return;
 			}
 		}
