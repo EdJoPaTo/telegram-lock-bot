@@ -27,7 +27,7 @@ bot.command('privacy', async ctx =>
 	));
 
 bot.command('lock', async ctx => {
-	const lockName = typeof ctx.match === 'string' && ctx.match.trim();
+	const lockName = ctx.match.trim();
 	if (!lockName) {
 		return ctx.reply('Use /lock <something>', {
 			reply_markup: {remove_keyboard: true},
@@ -76,7 +76,7 @@ async function unlock(
 	ctx: CommandContext<Context>,
 	force: boolean,
 ): Promise<unknown> {
-	const lockName = typeof ctx.match === 'string' && ctx.match.trim();
+	const lockName = ctx.match.trim();
 	if (!lockName) {
 		return ctx.reply('Use /unlock <something>', {
 			reply_markup: {remove_keyboard: true},
