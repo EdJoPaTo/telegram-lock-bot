@@ -1,0 +1,32 @@
+{
+	"$schema": "./node_modules/oxlint/configuration_schema.json",
+	"plugins": ["import", "jsdoc", "node", "oxc", "promise", "typescript", "unicorn"],
+	"categories": {
+		"correctness": "error",
+		"suspicious": "error",
+		"pedantic": "error",
+		"perf": "error"
+	},
+	"rules": {
+		"func-style": ["error", "declaration"],
+		"no-inline-comments": "allow",
+		"no-warning-comments": "warn",
+		"typescript/prefer-nullish-coalescing": ["error", { "ignorePrimitives": { "string": true } }],
+		"typescript/prefer-readonly-parameter-types": ["allow"],
+		"typescript/strict-boolean-expressions": [
+			"error",
+			{
+				"allowNullableBoolean": true,
+				"allowNullableString": true,
+				"allowString": true
+			}
+		]
+	},
+	"env": {
+		"builtin": true
+	},
+	"options": {
+		"reportUnusedDisableDirectives": "error",
+		"typeAware": true
+	}
+}

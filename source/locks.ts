@@ -1,5 +1,5 @@
-import {KeyValueInMemoryFiles} from '@edjopato/datastore';
-import type {Chat, User} from 'grammy/types';
+import { KeyValueInMemoryFiles } from "@edjopato/datastore";
+import type { Chat, User } from "grammy/types";
 
 type UnixTimestamp = number;
 
@@ -15,10 +15,10 @@ type LockFile = {
 	};
 };
 
-const data = new KeyValueInMemoryFiles<string, LockFile>('locks');
+const data = new KeyValueInMemoryFiles<string, LockFile>("locks");
 
 function chatKeyOfChat(chatId: number): string {
-	return chatId > 0 ? String(chatId) : String(chatId).replace('-', 'g');
+	return chatId > 0 ? String(chatId) : String(chatId).replace("-", "g");
 }
 
 export function isLocked(chatId: number, lockName: string): Lock | undefined {
@@ -38,21 +38,14 @@ export async function lock(
 ): Promise<Lock> {
 	const chatData = data.get(chatKeyOfChat(chat.id)) ?? {
 		chat,
-		config: {
-			locks: {},
-		},
-	};
-
-	const lock: Lock = {
-		user,
-		date,
+		config: { locks: {} },
 	};
 
 	chatData.chat = chat;
-	chatData.config.locks[lockName] = lock;
+	chatData.config.locks[lockName] = { user, date };
 
 	await data.set(chatKeyOfChat(chat.id), chatData);
-	return lock;
+	return { user, date };
 }
 
 export async function unlock(chat: Chat, lockName: string): Promise<void> {
@@ -62,7 +55,6 @@ export async function unlock(chat: Chat, lockName: string): Promise<void> {
 	}
 
 	chatData.chat = chat;
-	// eslint-disable-next-line @typescript-eslint/no-dynamic-delete
 	delete chatData.config.locks[lockName];
 
 	await data.set(chatKeyOfChat(chat.id), chatData);
@@ -82,11 +74,9 @@ export function remove(chatId: number): void {
 }
 
 export function allChats(): readonly Chat[] {
-	return (
-		data
-			.keys()
-			.map(o => data.get(o))
-			.filter(o => o !== undefined)
-			.map(o => o.chat)
-	);
+	return data
+		.keys()
+		.map((o) => data.get(o))
+		.filter((o) => o !== undefined)
+		.map((o) => o.chat);
 }

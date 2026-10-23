@@ -1,27 +1,11 @@
 {
 	"name": "telegram-lock-bot",
-	"description": "Telegram Bot to handle a soft 'lock' / 'mutex' on something",
 	"private": true,
-	"version": "3.1.4",
 	"license": "MIT",
-	"repository": "EdJoPaTo/telegramLockBot",
-	"author": {
-		"name": "EdJoPaTo",
-		"email": "lock-telegram-bot@edjopato.de",
-		"url": "https://edjopato.de"
-	},
+	"type": "module",
 	"scripts": {
 		"start": "node --enable-source-maps source/telegram-lock-bot.ts",
-		"test": "tsc && xo"
-	},
-	"type": "module",
-	"engines": {
-		"node": ">=24"
-	},
-	"devEngines": {
-		"packageManager": {
-			"name": "npm"
-		}
+		"test": "tsc && oxlint && oxfmt --check"
 	},
 	"dependencies": {
 		"@edjopato/datastore": "^0.7.2",
@@ -31,13 +15,17 @@
 	},
 	"devDependencies": {
 		"@types/node": "^24.10.1",
-		"typescript": "^6.0.2",
-		"xo": "^1.2.1"
+		"oxfmt": "^0.74.0",
+		"oxlint": "^1.89.0",
+		"oxlint-tsgolint": "^7.0.2005",
+		"typescript": "^7.0.2"
 	},
-	"xo": {
-		"rules": {
-			"@typescript-eslint/naming-convention": "off",
-			"unicorn/prevent-abbreviations": "off"
+	"devEngines": {
+		"packageManager": {
+			"name": "npm"
 		}
+	},
+	"engines": {
+		"node": ">=24"
 	}
 }
