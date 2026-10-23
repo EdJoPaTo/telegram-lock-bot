@@ -21,6 +21,20 @@ if (env["NODE_ENV"] !== "production") {
 
 bot.use(parts.bot.middleware());
 
+await bot.api.setMyShortDescription(
+	"This bot will help you to lock and unlock files that only one person should handle at one time. Created by @EdJoPaTo",
+);
+
+await bot.api.setMyDescription(
+	`This bot will help you to lock and unlock files and other stuff that only one person should handle at one time.
+
+Basically a locked file is locked to you. You edit it and all others wait until you are finished.
+
+This bot can only help you to organize your group! It doesn't really lock your files!
+
+Created by @EdJoPaTo`,
+);
+
 await bot.api.setMyCommands([
 	{ command: "lock", description: "lock something" },
 	{ command: "unlock", description: "unlock something you locked" },
