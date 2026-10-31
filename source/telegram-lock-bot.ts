@@ -38,10 +38,7 @@ Created by @EdJoPaTo`,
 await bot.api.setMyCommands([
 	{ command: "lock", description: "lock something" },
 	{ command: "unlock", description: "unlock something you locked" },
-	{
-		command: "forceunlock",
-		description: "force to unlock something that someone else locked",
-	},
+	{ command: "forceunlock", description: "force to unlock something that someone else locked" },
 	{ command: "listlocks", description: "list all current locks" },
 ]);
 

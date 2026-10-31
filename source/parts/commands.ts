@@ -14,27 +14,21 @@ function lockKeeperLink(lock: locks.Lock): string {
 bot.command("start", (ctx) =>
 	ctx.reply(
 		"You can use /lock and /unlock to coordinate with your group. It will not lock anything for real but its a neat tool to work together on things like files in shared folders.",
-		{
-			reply_markup: { remove_keyboard: true },
-		},
+		{ reply_markup: { remove_keyboard: true } },
 	),
 );
 
 bot.command("privacy", (ctx) =>
 	ctx.reply(
 		"You can see the data stored for this chat with /listlocks. See source code at https://github.com/EdJoPaTo/telegram-lock-bot",
-		{
-			reply_markup: { remove_keyboard: true },
-		},
+		{ reply_markup: { remove_keyboard: true } },
 	),
 );
 
 bot.command("lock", async (ctx) => {
 	const lockName = ctx.match.trim();
 	if (!lockName) {
-		return ctx.reply("Use /lock <something>", {
-			reply_markup: { remove_keyboard: true },
-		});
+		return ctx.reply("Use /lock <something>", { reply_markup: { remove_keyboard: true } });
 	}
 
 	if (lockName.length > MAX_LOCK_LENGTH) {
@@ -67,9 +61,7 @@ bot.command("forceunlock", (ctx) => unlock(ctx, true));
 async function unlock(ctx: CommandContext<Context>, force: boolean): Promise<unknown> {
 	const lockName = ctx.match.trim();
 	if (!lockName) {
-		return ctx.reply("Use /unlock <something>", {
-			reply_markup: { remove_keyboard: true },
-		});
+		return ctx.reply("Use /unlock <something>", { reply_markup: { remove_keyboard: true } });
 	}
 
 	const existingLock = locks.isLocked(ctx.chat.id, lockName);
@@ -112,9 +104,7 @@ bot.command(["list", "listlocks"], async (ctx) => {
 	list = locks.list(ctx.chat.id);
 
 	if (Object.keys(list).length === 0) {
-		return ctx.reply("Nothing locked.", {
-			reply_markup: { remove_keyboard: true },
-		});
+		return ctx.reply("Nothing locked.", { reply_markup: { remove_keyboard: true } });
 	}
 
 	let text = "";
